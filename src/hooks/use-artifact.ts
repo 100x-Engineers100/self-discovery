@@ -1,0 +1,116 @@
+"use client";
+
+import { useCallback, useMemo } from "react";
+import useSWR from "swr";
+import type { UIArtifact } from "@/components/artifact";
+import type { Metadata as CodeArtifactMetadata } from "@/artifacts/code/client";
+import type { Metadata as SheetArtifactMetadata } from "@/artifacts/sheet/client";
+import type { TextArtifactMetadata } from "@/artifacts/text/client";
+import type { Metadata as ImageArtifactMetadata } from "@/artifacts/image/client";
+
+export const initialArtifactData: UIArtifact = {
+  documentId: "init",
+  content: "",
+  kind: "text",
+  title: "",
+  status: "idle",
+  isVisible: false,
+  boundingBox: {
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+  },
+};
+
+type Selector<T> = (state: UIArtifact) => T;
+
+export function useArtifactSelector<Selected>(selector: Selector<Selected>) {
+  const { data: localArtifact } = useSWR<UIArtifact>("artifact", null, {
+    fallbackData: initialArtifactData,
+  });
+
+  const selectedValue = useMemo(() => {
+    if (!localArtifact) {
+      return selector(initialArtifactData);
+    }
+    return selector(localArtifact);
+  }, [localArtifact, selector]);
+
+  return selectedValue;
+}
+
+type AllArtifactMetadata =
+  | CodeArtifactMetadata
+  | SheetArtifactMetadata
+  | TextArtifactMetadata
+  | ImageArtifactMetadata;
+
+export function useArtifact() {
+  const { data: localArtifact, mutate: setLocalArtifact } = useSWR<UIArtifact>(
+    "artifact",
+    null,
+    {
+      fallbackData: initialArtifactData,
+    }
+  );
+
+  const artifact = useMemo(() => {
+    if (!localArtifact) {
+      return initialArtifactData;
+    }
+    return localArtifact;
+  }, [localArtifact]);
+
+  const setArtifact = useCallback(
+    (updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)) => {
+      setLocalArtifact((currentArtifact) => {
+        const artifactToUpdate = currentArtifact || initialArtifactData;
+
+        if (typeof updaterFn === "function") {
+          return updaterFn(artifactToUpdate);
+        }
+
+        return updaterFn;
+      });
+    },
+    [setLocalArtifact]
+  );
+
+  const { data: localArtifactMetadata, mutate: setLocalArtifactMetadata } =
+    useSWR<AllArtifactMetadata | null>(
+      () =>
+        artifact.documentId ? `artifact-metadata-${artifact.documentId}` : null,
+      null,
+      {
+        fallbackData: null,
+      }
+    );
+
+  const setMetadata = useCallback(
+    (
+      updaterFn: AllArtifactMetadata | null | ((currentMetadata: AllArtifactMetadata | null) => AllArtifactMetadata | null)
+    ) => {
+      setLocalArtifactMetadata((currentMetadata) => {
+        const metadataToUpdate = currentMetadata ?? null;
+
+        if (typeof updaterFn === "function") {
+          return updaterFn(metadataToUpdate);
+        }
+
+        return updaterFn;
+      });
+    },
+    [setLocalArtifactMetadata]
+  );
+
+  return useMemo(
+    () => ({
+      artifact,
+      setArtifact,
+      metadata: localArtifactMetadata,
+      setMetadata,
+    }),
+    [artifact, setArtifact, localArtifactMetadata, setMetadata]
+  );
+}
