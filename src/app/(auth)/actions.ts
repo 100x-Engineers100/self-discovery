@@ -64,7 +64,11 @@ export const login = async (
       };
     }
 
-    return { status: "failed", message: "An unexpected error occurred." };
+    return {
+      status: "failed",
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    };
   }
 };
 
