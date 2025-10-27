@@ -287,6 +287,7 @@ export default function ProjectIdeationPage() {
         },
         body: JSON.stringify({
           menteeId: session.user.id,
+          menteeName: session.user.name, // Add mentee's name here
           amount: 40000, // Hardcoded for ideation_balance
           chatHistory: chatHistory,
           balanceType: balanceType,
@@ -331,6 +332,7 @@ export default function ProjectIdeationPage() {
         },
         body: JSON.stringify({
           userId: session.user.id,
+          userName: session.user.name, // Add user's name here
           moduleName: selectedModule.name,
           chatHistory: chatHistory,
         })

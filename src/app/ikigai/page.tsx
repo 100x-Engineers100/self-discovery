@@ -163,6 +163,7 @@ export default function IkigaiPage() {
           amount: 15000, // Hardcoded for ikigai_balance
           chatHistory: currentChatHistory,
           balanceType: "ikigai_balance", // Hardcoded for ikigai_balance
+          menteeName: session.user.name,
         }),
       });
 
