@@ -31,7 +31,7 @@ interface ProjectSample {
 
 const modules: ModuleContext[] = [
   {
-    name: "Module 1: Diffusion Models (Weeks 1-6)",
+    name: "Module 1: Diffusion Models",
     description: "Learn about Diffusion Models and their applications.",
     learningOutcomes: [
       "Understanding of GenAI Landscape and fundamentals",
@@ -64,7 +64,7 @@ const modules: ModuleContext[] = [
     balanceType: "ideation_balance_1",
   },
   {
-    name: "Module 2: Full Stack Development (Weeks 7-12)",
+    name: "Module 2: Full Stack Development",
     description: "Learn full-stack development with a focus on AI applications.",
     learningOutcomes: [
       "Strong programming foundation",
@@ -97,7 +97,7 @@ const modules: ModuleContext[] = [
     balanceType: "ideation_balance_2",
   },
   {
-    name: "Module 3: Large Language Models (Weeks 13-18)",
+    name: "Module 3: Large Language Models",
     description: "Explore the foundations, advanced concepts, and implementation of Large Language Models.",
     learningOutcomes: [
       "Understanding of LLM ecosystem",
@@ -134,7 +134,7 @@ const modules: ModuleContext[] = [
     balanceType: "ideation_balance_3",
   },
   {
-    name: "Module 4: AI Agents (Weeks 19-22)",
+    name: "Module 4: AI Agents",
     description: "Delve into AI Agents, multi-agent systems, and their production implementation.",
     learningOutcomes: [
       "Understanding of agent architecture",
@@ -437,7 +437,6 @@ export default function ProjectIdeationPage() {
                   onClick={() => setSelectedModule(module)}
                 >
                   <h2 className="text-xl font-semibold">{module.name}</h2>
-                  <p className="text-sm text-gray-600">{module.description}</p>
                 </div>
               ))}
             </div>
