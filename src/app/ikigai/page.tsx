@@ -298,6 +298,14 @@ export default function IkigaiPage() {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="large" />
+      </div>
+    );
+  }
+
   if (!session?.user) {
     return (
       <div className="flex flex-col h-full items-center justify-center">
