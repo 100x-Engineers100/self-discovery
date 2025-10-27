@@ -4,6 +4,9 @@ const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      colors: {
+        "custom-orange": "#FF6445",
+      },
       keyframes: {
         spin: {
           to: { transform: 'rotate(360deg)' },

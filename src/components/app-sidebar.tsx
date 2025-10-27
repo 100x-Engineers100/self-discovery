@@ -68,8 +68,8 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                   setOpenMobile(false);
                 }}
               >
-                <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                  Chatbot
+                <span className="cursor-pointer rounded-md p-2 font-semibold text-lg hover:bg-muted">
+                  <img src="/100xEngineers-black.svg" alt="100xEngineers" className="h-6 w-auto" />
                 </span>
               </Link>
               {/* <div className="flex flex-row gap-1">
@@ -116,7 +116,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",
-                    activePath === "/ikigai" ? "bg-[#ee593b] text-white" : "text-black bg-gray-200"
+                    activePath === "/ikigai" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
                   href="/ikigai"
                   onClick={() => setOpenMobile(false)}
@@ -126,7 +126,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",
-                    activePath === "/project-ideation" ? "bg-[#ee593b] text-white" : "text-black bg-gray-200"
+                    activePath === "/project-ideation" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
                   href="/project-ideation"
                   onClick={() => setOpenMobile(false)}
@@ -136,7 +136,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",
-                    activePath === "/cohort-roadmap" ? "bg-[#ee593b] text-white" : "text-black bg-gray-200"
+                    activePath === "/cohort-roadmap" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
                   href="/cohort-roadmap"
                   onClick={() => setOpenMobile(false)}

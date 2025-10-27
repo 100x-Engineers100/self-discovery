@@ -18,7 +18,7 @@
   --card-foreground: hsl(240 10% 3.9%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(240 10% 3.9%);
-  --primary: #ee593b; /* Orange */
+  --primary: #FF6445; /* Orange */
   --primary-foreground: #FFFFFF; /* White */
   --secondary: hsl(240 4.8% 95.9%);
   --secondary-foreground: hsl(240 5.9% 10%);
@@ -57,7 +57,7 @@
   --card-foreground: hsl(0 0% 98%);
   --popover: hsl(240 10% 3.9%);
   --popover-foreground: hsl(0 0% 98%);
-  --primary: #ee593b; /* Orange */
+  --primary: #FF6445; /* Orange */
   --primary-foreground: #FFFFFF; /* White */
   --secondary: hsl(240 3.7% 15.9%);
   --secondary-foreground: hsl(0 0% 98%);
