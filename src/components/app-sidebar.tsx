@@ -56,7 +56,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
   };
 
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-full">
       <Sidebar className="group-data-[side=left]:border-r-0">
         <SidebarHeader>
           <SidebarMenu>
