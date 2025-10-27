@@ -16,6 +16,7 @@ import { ChatMessage, ChatTools, CustomUIDataTypes, IkigaiData } from "@/lib/typ
 import { Toaster } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UIMessagePart } from "ai";
+import Spinner  from "@/components/ui/spinner";
 
 async function saveIkigaiAnswers(userId: string, ikigaiDetails: IkigaiData, chatHistory: ChatMessage[]) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
@@ -286,7 +287,11 @@ export default function IkigaiPage() {
   }, [ikigaiBalance, MAX_TOKENS_PER_MENTEE, hasShownBalanceWarning]);
 
   if (status === "loading") {
-    return <div className="flex flex-col h-full items-center justify-center">Loading...</div>;
+    return (
+      <div className="flex flex-col h-full items-center justify-center">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   if (!session?.user) {

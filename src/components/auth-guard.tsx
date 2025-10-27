@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Spinner from "@/components/ui/spinner";
 
 export default function AuthGuard({
   children,
@@ -19,7 +20,11 @@ export default function AuthGuard({
   }, [status, router]);
 
   if (status === "loading") {
-    return <div>Loading...</div>; // Or a more sophisticated loading spinner
+    return (
+      <div className="flex flex-col h-full items-center justify-center">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   return <>{children}</>;

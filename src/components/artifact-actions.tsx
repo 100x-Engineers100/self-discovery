@@ -5,6 +5,7 @@ import { artifactDefinitions, type UIArtifact } from "./artifact";
 import type { ArtifactActionContext } from "./create-artifact";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import Spinner from "@/components/ui/spinner";
 
 type ArtifactActionsProps<M = unknown> = {
   artifact: UIArtifact;
@@ -75,8 +76,14 @@ function PureArtifactActions<M = unknown>({
               }}
               variant="outline"
             >
-              {action.icon}
-              {action.label}
+              {isLoading || artifact.status === "streaming" ? (
+                <Spinner size="large" />
+              ) : (
+                <>
+                  {action.icon}
+                  {action.label}
+                </>
+              )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>{action.description}</TooltipContent>

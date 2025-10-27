@@ -9,6 +9,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { DataStreamProvider } from "@/components/data-stream-provider";
 import { DEFAULT_CHAT_MODEL } from "../../lib/ai/models";
 import Head from "next/head";
+import Spinner from "@/components/ui/spinner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/toast";
 import { Toaster } from "sonner";
@@ -337,7 +338,11 @@ export default function ProjectIdeationPage() {
   }, [ideationBalance, MAX_TOKENS_PER_MENTEE, hasShownBalanceWarning]);
 
   if (isLoading) {
-    return <div>Loading Project Ideation...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   if (!session?.user) {

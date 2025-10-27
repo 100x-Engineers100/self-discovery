@@ -45,7 +45,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
   const handleDeleteAll = () => {
     // Removed history API call
     toast.promise(Promise.resolve(), {
-      loading: "Deleting all chats...",
+      // loading: "Deleting all chats...",
       success: () => {
         router.push("/");
         setShowDeleteAllDialog(false);

@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { LoaderIcon } from "@/components/icons";
 
 import { Button } from "./ui/button";
+import Spinner from "@/components/ui/spinner";
 
 export function SubmitButton({
   children,
@@ -25,8 +26,8 @@ export function SubmitButton({
       {children}
 
       {(pending || isSuccessful) && (
-        <span className="absolute right-4 animate-spin">
-          <LoaderIcon />
+        <span className="absolute right-4">
+          <Spinner size="large" />
         </span>
       )}
 

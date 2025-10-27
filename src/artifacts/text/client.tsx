@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { Artifact } from "@/components/create-artifact";
 import { DiffView } from "@/components/diffview";
 import { DocumentSkeleton } from "@/components/document-skeleton";
+import Spinner from "@/components/ui/spinner";
 import {
   ClockRewind,
   CopyIcon,
@@ -60,7 +61,11 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     // metadata,
   }) => {
     if (isLoading) {
-      return <DocumentSkeleton artifactKind="text" />;
+      return (
+        <div className="flex h-full w-full items-center justify-center">
+          <Spinner size="large" />
+        </div>
+      );
     }
 
     if (mode === "diff") {

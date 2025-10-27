@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import Spinner from "@/components/ui/spinner";
 
 interface RoadmapItem {
   id: string;
@@ -77,7 +78,11 @@ export default function CohortRoadmapPage() {
   const groupedRoadmap = groupRoadmap(roadmapData);
 
   if (isLoading) {
-    return <div>Loading Cohort Roadmap...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   return (

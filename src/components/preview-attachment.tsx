@@ -1,8 +1,8 @@
 import Image from "next/image";
 import type { Attachment } from "@/lib/types";
-import { Loader } from "./elements/loader";
 import { CrossSmallIcon } from "./icons";
 import { Button } from "./ui/button";
+import Spinner from "./ui/spinner";
 
 export const PreviewAttachment = ({
   attachment,
@@ -36,7 +36,7 @@ export const PreviewAttachment = ({
 
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-          <Loader size={16} />
+          <Spinner size="large" /> 
         </div>
       )}
 
