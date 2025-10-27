@@ -119,6 +119,7 @@ export default function IkigaiPage() {
   const [show0PercentWarning, setShow0PercentWarning] = useState(false);
   const [hasShownBalanceWarning, setHasShownBalanceWarning] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   const MAX_TOKENS_PER_MENTEE = 15000; // Define the max tokens here for percentage calculation
 
@@ -238,6 +239,7 @@ export default function IkigaiPage() {
   useEffect(() => {
     const fetchIkigaiStatus = async () => {
       if (session?.user) {
+        setIsLoading(true); // Set loading to true before fetching
         try {
           const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${session.user.id}`);
           if (response.ok) {
@@ -258,6 +260,8 @@ export default function IkigaiPage() {
           }
         } catch (error) {
           console.error("Error fetching Ikigai status:", error);
+        } finally {
+          setIsLoading(false); // Set loading to false after fetching (success or error)
         }
       }
     };
