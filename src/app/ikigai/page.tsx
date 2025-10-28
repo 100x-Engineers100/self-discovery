@@ -197,7 +197,7 @@ export default function IkigaiPage() {
       try {
         const parsedIkigaiData = parseIkigaiResponse(text);
         if (parsedIkigaiData) {
-          setIkigaiData(parsedIkigaiData);
+          // setIkigaiData(parsedIkigaiData);
           if (session?.user?.id) {
             const ikigaiDetails = parsedIkigaiData;
             
@@ -225,7 +225,7 @@ export default function IkigaiPage() {
       try {
         const parsedIkigaiData = parseIkigaiResponse(text);
         if (parsedIkigaiData) {
-          setIkigaiData(parsedIkigaiData);
+          // setIkigaiData(parsedIkigaiData);
           toast({
             description: "Your Ikigai data has been successfully saved.",
             type: "success",
@@ -247,7 +247,7 @@ export default function IkigaiPage() {
             const data = await response.json();
             if (data && data?.ikigai_details?.status === 'complete') {
               setIkigaiFilled(true);
-              setIkigaiData(data);
+              setIkigaiData(data.ikigai_details);
             } else {
               setIkigaiFilled(false);
               setIkigaiData(null);

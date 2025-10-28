@@ -89,10 +89,10 @@ export default function CohortRoadmapPage() {
     <SidebarProvider>
       <AppSidebar user={session?.user} activePath="/cohort-roadmap">
         <div className="flex-1 flex flex-col p-4 bg-white min-h-screen">
-          <h1 className="text-3xl font-extrabold mb-6 text-[#ee593b]">Your Personalized Roadmap</h1>
+          <h1 className="text-3xl font-extrabold mb-6 text-[#FF6445]">Your Personalized Roadmap</h1>
           <div className="space-y-8">
             {Object.entries(groupedRoadmap).map(([module_name, weeks]) => (
-              <div key={module_name} className="bg-[#ee593b] p-6 rounded-lg shadow-lg">
+              <div key={module_name} className="bg-[#FF6445] p-6 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-4 text-white">{module_name}</h2>
                 {Object.entries(weeks).map(([week_number, sessions]) => (
                   <div key={week_number} className="ml-4 mt-4 border-l-2 border-white pl-4">
