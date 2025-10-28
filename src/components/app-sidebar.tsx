@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { User } from "next-auth";
 import { useState } from "react";
 import { toast } from "sonner";
+import useSWR from "swr";
 import { useSWRConfig } from "swr";
 import { PlusIcon, TrashIcon } from "@/components/icons";
 import { SidebarUserNav } from "@/components/sidebar-user-nav";
@@ -36,11 +37,37 @@ interface AppSidebarProps {
   user: User | undefined; // Add user prop
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
   const { mutate } = useSWRConfig();
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
+
+  const { data: ikigaiData, error: ikigaiError, isLoading: isIkigaiDataLoading } = useSWR(
+    user ? `${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${user.id}` : null,
+    fetcher
+  );
+
+  const isIkigaiComplete = ikigaiData?.ikigai_details?.status === "complete";
+
+  const handleNavigation = (e: React.MouseEvent, path: string) => {
+    if (isIkigaiDataLoading) {
+      e.preventDefault();
+      toast.info("Loading Ikigai status, please wait...");
+      setOpenMobile(false);
+      return;
+    }
+    
+    if (!isIkigaiComplete && (path === "/project-ideation" || path === "/cohort-roadmap")) {
+      e.preventDefault();
+      toast.error("Please complete your Ikigai chart first to access this page.");
+      setOpenMobile(false);
+      return;
+    }
+    setOpenMobile(false);
+  };
 
   const handleDeleteAll = () => {
     // Removed history API call
@@ -129,7 +156,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                     activePath === "/project-ideation" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
                   href="/project-ideation"
-                  onClick={() => setOpenMobile(false)}
+                  onClick={(e) => handleNavigation(e, "/project-ideation")}
                 >
                   Project Ideation
                 </Link>
@@ -139,7 +166,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                     activePath === "/cohort-roadmap" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
                   href="/cohort-roadmap"
-                  onClick={() => setOpenMobile(false)}
+                  onClick={(e) => handleNavigation(e, "/cohort-roadmap")}
                 >
                   Cohort Roadmap
                 </Link>

@@ -472,8 +472,12 @@ export default function ProjectIdeationPage() {
                         role: "assistant",
                         parts: [
                           {
+                            type: "step-start",
+                          },
+                          {
                             type: "text",
                             text: `Hello! I'm here to help you ideate project ideas for "${selectedModule.name}". You can either tell me your own project idea to refine, or ask me for suggestions based on the module's topics and your Ikigai data. How would you like to start?`,
+                            state: "done"
                           },
                         ],
                       },

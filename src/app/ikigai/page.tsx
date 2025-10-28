@@ -370,8 +370,12 @@ export default function IkigaiPage() {
                         role: "assistant",
                         parts: [
                           {
+                            type: "step-start"
+                          },
+                          {
                             type: "text",
                             text: "Hello! I'm here to help you discover your Ikigai. Let's start with the first element: **What do you love?** Please share your passions, hobbies, and activities that bring you joy and energy. Think about what truly excites you and makes you lose track of time.",
+                            state: "done"
                           },
                         ],
                       },

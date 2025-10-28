@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from 'next/navigation';
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "sonner";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -44,6 +45,7 @@ export default function Home() {
            <></>
         )}
       </div>
+      <Toaster />
     </section>
   );
 }
