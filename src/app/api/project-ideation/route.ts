@@ -106,6 +106,7 @@ export async function POST(req: Request) {
       moduleContext,
       userIkigaiData,
       chatHistory, // Add chatHistory here
+      userName, // Add userName here
     } = await req.json();
 
     if (!userId) {
@@ -210,7 +211,8 @@ export async function POST(req: Request) {
             parsedProjectIdea.features
               ? parsedProjectIdea.features
               : [],
-          chatHistory: chatHistory,
+          chat_history: chatHistory,
+          user_name: userName, // Add user_name here
         };
 
         // Update to new profile-system endpoint
@@ -256,7 +258,7 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const { userId, moduleName, chatHistory } = await req.json();
+    const { userId, moduleName, chatHistory, userName } = await req.json();
 
     if (!userId || !moduleName) {
       return NextResponse.json(
@@ -331,9 +333,10 @@ export async function PUT(req: Request) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            user_id: userId,
-            module_name: moduleName,
+            userId,
+            moduleName,
             chat_history: chatHistory,
+            userName,
           }),
         }
       );

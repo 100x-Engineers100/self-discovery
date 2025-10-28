@@ -249,7 +249,7 @@ export default function ProjectIdeationPage() {
         );
         if (response.ok) {
           const data = await response.json();
-          setUserIkigaiData(data);
+          setUserIkigaiData(data.ikigai_details);
         } else {
           console.error("Failed to fetch user Ikigai data");
           setUserIkigaiData(null); // Ensure it's null on error
@@ -317,6 +317,8 @@ export default function ProjectIdeationPage() {
   const [projectIdeaId, setProjectIdeaId] = useState<string | null>(null);
 
   const handleChatFinish = async (text: string, messages: ChatMessage[]) => {
+    console.log("1");
+    
     fetchIdeationBalance(selectedModule?.name || '');
     setProjectIdeationFilled(true);
     setChatHistory(messages);
@@ -328,6 +330,10 @@ export default function ProjectIdeationPage() {
           role: msg.role,
           parts: Array.isArray(msg.parts) ? msg.parts : [{ type: 'text', text: '' }] // Adjust based on actual message structure
         }));
+
+        console.log("userName", session.user.name);
+        
+
       await fetch(`${process.env.NEXT_PUBLIC_SELF_DISCOVERY_API_BASE_URL}/api/project-ideation`, {
         method: 'PUT',
         headers: {
@@ -458,6 +464,7 @@ export default function ProjectIdeationPage() {
                 <DataStreamProvider>
                   <Chat
                     id="project-ideation"
+                    userName={session?.user?.name || ""}
                     initialChatModel={DEFAULT_CHAT_MODEL}
                     initialMessages={chatHistory.length > 0 ? chatHistory : [
                       {

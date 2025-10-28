@@ -40,6 +40,7 @@ export const CREDIT_CONVERSION_RATE = 1000; // 1 credit = 1000 tokens
 
 export type ChatProps = {
   id: string;
+  userName?: string;
   initialMessages: ChatMessage[];
   initialChatModel: string;
   initialVisibilityType: VisibilityType;
@@ -73,6 +74,7 @@ export function Chat({
   saveIkigaiAnswers,
   onChatFinish,
   userId,
+  userName,
   balance,
   setBalance,
   api = "/api/chat", // Default to /api/chat
@@ -477,7 +479,8 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
             body: JSON.stringify({
               userId: userId,
               moduleName: moduleContext.name,
-              chatHistory: chatHistory
+              chatHistory: chatHistory,
+              userName: userName,
             })
           });
           // Fetch and update balance after saving project ideation chat history
