@@ -176,19 +176,22 @@ interface IkigaiData {
 
 const generateSystemPrompt = (ikigaiData: IkigaiData | null, moduleContext: ModuleContext, samples: ProjectSample[]): string => {  
   let ikigaiPrompt = "";
-  if (ikigaiData) {
+  if (ikigaiData && ikigaiData.status === 'complete') {
     ikigaiPrompt = `Mentee\'s Ikigai Data:\n  - What they love: ${ikigaiData.what_you_love}\n  - What they are good at: ${ikigaiData.what_you_are_good_at}\n  - What the world needs: ${ikigaiData.what_world_needs}\n  - What they can be paid for: ${ikigaiData.what_you_can_be_paid_for}`;
-
-    if (ikigaiData.status === 'complete') {
-      ikigaiPrompt += `\n  - Your Ikigai: ${ikigaiData.your_ikigai}\n  - Explanation: ${ikigaiData.explanation}`;
-    }
+    ikigaiPrompt += `\n  - Your Ikigai: ${ikigaiData.your_ikigai}\n  - Explanation: ${ikigaiData.explanation}`;
   }
 
   const modulePrompt = `Module Context:\n  - Module Name: ${moduleContext.name}\n  - Description: ${moduleContext.description}\n  - Learning Outcomes: ${moduleContext.learningOutcomes.join(", ")}\n  - Topics Covered: ${moduleContext.topicsCovered.join(", ")}`;
 
   const samplesPrompt = samples.map((sample, index) => `Project Sample ${index + 1}:\n  - Title: ${sample.title}\n  - Problem Statement: ${sample.problemStatement}\n  - Solution: ${sample.solution}`).join("\n\n");
 
-  return `You are an AI assistant helping a mentee ideate a project problem statement and solution. The mentee might provide their own ideas, and your role is to help them refine and update those ideas, ensuring they are concise, clear, and address a real-world need. You should also help them define a list of features for the project. If the mentee agrees to save a project idea, you MUST respond with the keyword PROJECT_IDEA_AGREED_TO_SAVE followed by a JSON object containing the problemStatement, solution, and a comma-separated string of features. For example: PROJECT_IDEA_AGREED_TO_SAVE: { "problemStatement": "...", "solution": "...", "features": "feature1, feature2, feature3" }`
+  return `${ikigaiPrompt}
+
+${modulePrompt}
+
+${samplesPrompt}
+
+You are an AI assistant helping a mentee ideate a project problem statement and solution. The mentee might provide their own ideas, and your role is to help them refine and update those ideas, ensuring they are concise, clear, and address a real-world need. You should also help them define a list of features for the project. If the mentee agrees to save a project idea, you MUST respond with the keyword PROJECT_IDEA_AGREED_TO_SAVE followed by a JSON object containing the problemStatement, solution, and a comma-separated string of features. For example: PROJECT_IDEA_AGREED_TO_SAVE: { "problemStatement": "...", "solution": "...", "features": "feature1, feature2, feature3" }`
 };
 
 const projectSamples: ProjectSample[] = [
