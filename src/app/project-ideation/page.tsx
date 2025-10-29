@@ -254,11 +254,11 @@ export default function ProjectIdeationPage() {
           setUserIkigaiData(data.ikigai_details);
         } else {
           console.error("Failed to fetch user Ikigai data");
-          setUserIkigaiData(null); // Ensure it's null on error
+          setUserIkigaiData(null); 
         }
       } catch (error) {
         console.error("Error fetching user Ikigai data:", error);
-        setUserIkigaiData(null); // Ensure it's null on error
+        setUserIkigaiData(null); 
       }
     }
   };
