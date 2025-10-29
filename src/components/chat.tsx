@@ -53,6 +53,7 @@ export type ChatProps = {
   userId?: string;
   balance: number;
   setBalance: (balance: number) => void;
+  setChatHistory: (messages: ChatMessage[]) => void;
   moduleContext?: { balanceType?: string; name?: string };
   userIkigaiData?: unknown;
   api?: string; // Add api prop
@@ -80,6 +81,7 @@ export function Chat({
   api = "/api/chat", // Default to /api/chat
   systemPrompt,
   moduleContext,
+  setChatHistory,
   userIkigaiData,
   balanceType,
   disabled, // Add disabled prop
@@ -300,6 +302,8 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
                   parts: Array.isArray(msg.parts) ? msg.parts : [{ type: 'text', text: '' } as TextUIPart]
                 }));
 
+              setChatHistory(chatHistory);
+
               fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
                 method: 'POST',
                 headers: {
@@ -385,6 +389,8 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
                   };
                 });
 
+                setChatHistory(chatHistory);
+
               // Add chat history to ikigai data
               const completeIkigaiData = {
                 ...ikigaiData,
@@ -432,6 +438,8 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
                   };
                 });
 
+                setChatHistory(chatHistory);
+
               // Add chat history to ikigai data
               const completeIkigaiData = {
                 status: 'ongoing',
@@ -470,6 +478,8 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
               role: msg.role,
               parts: msg.parts && msg.parts.length > 0 ? msg.parts : [{ type: 'text', text: (msg.parts?.[0] as TextUIPart)?.text || '' } as TextUIPart],
             }));
+
+          setChatHistory(chatHistory);
 
           await fetch(`/api/project-ideation`, {
             method: 'PUT',
@@ -550,11 +560,11 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
   //   }
   // }, [status, messages, onChatFinish]);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  // const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
 
   return (
     <DataStreamProvider>

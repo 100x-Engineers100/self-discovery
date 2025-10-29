@@ -48,13 +48,17 @@ function PureMessages({
   useDataStream();
 
   useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  useEffect(() => {
     if (status === "submitted") {
       requestAnimationFrame(() => {
         const container = messagesContainerRef.current;
         if (container) {
           container.scrollTo({
             top: container.scrollHeight,
-            behavior: "smooth",
+            // behavior: "smooth",
           });
         }
       });

@@ -363,6 +363,7 @@ export default function IkigaiPage() {
               <div className="flex-grow overflow-y-auto">
                 <DataStreamProvider>
                   <Chat
+                    key={JSON.stringify(chatHistory)}
                     id="ikigai-chat"
                     initialMessages={chatHistory.length > 0 ? chatHistory : [
                       {
@@ -388,6 +389,8 @@ export default function IkigaiPage() {
                     saveIkigaiAnswers={saveIkigaiAnswers}
                     onChatFinish={handleChatFinish}
                     userId={session?.user?.id || ""}
+                    userName={session?.user?.name || ""}
+                    setChatHistory={setChatHistory}
                     balance={ikigaiBalance}
                     setBalance={setIkigaiBalance}
                     disabled={ikigaiBalance <= 0}

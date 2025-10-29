@@ -463,6 +463,7 @@ export default function ProjectIdeationPage() {
               <p className="text-lg text-gray-500 mb-4">Start ideating! <span className="text-sm text-gray-400">(Credits: {(ideationBalance/1000).toFixed(0)})</span></p>
                 <DataStreamProvider>
                   <Chat
+                    key={JSON.stringify(chatHistory)}
                     id="project-ideation"
                     userName={session?.user?.name || ""}
                     initialChatModel={DEFAULT_CHAT_MODEL}
@@ -491,6 +492,7 @@ export default function ProjectIdeationPage() {
                     userId={session?.user?.id || ""}
                     balance={ideationBalance}
                     setBalance={setIdeationBalance}
+                    setChatHistory={setChatHistory}
                     moduleContext={selectedModule}
                     userIkigaiData={userIkigaiData}
                     disabled={ideationBalance <= 0}
