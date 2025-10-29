@@ -415,6 +415,7 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
               }).catch(error => {
                 console.error('Error saving complete Ikigai data:', error);
               });
+              window.location.reload();
             } catch (error) {
               console.error("Failed to parse Ikigai JSON:", error);
             }

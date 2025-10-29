@@ -206,6 +206,7 @@ export default function IkigaiPage() {
               description: "Your Ikigai chart has been saved.",
               type: "success",
             });
+            window.location.reload();
           }
         }
         toast({
