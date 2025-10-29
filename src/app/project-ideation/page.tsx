@@ -218,7 +218,9 @@ export default function ProjectIdeationPage() {
   const [show50PercentWarning, setShow50PercentWarning] = useState(false);
   const [show20PercentWarning, setShow20PercentWarning] = useState(false);
   const [show0PercentWarning, setShow0PercentWarning] = useState(false);
-  const [hasShownBalanceWarning, setHasShownBalanceWarning] = useState(false);
+  const [hasShown50PercentWarning, setHasShown50PercentWarning] = useState(false);
+  const [hasShown20PercentWarning, setHasShown20PercentWarning] = useState(false);
+  const [hasShown0PercentWarning, setHasShown0PercentWarning] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
 
   const MAX_TOKENS_PER_MENTEE = 15000; // Define the max tokens here for percentage calculation
@@ -395,22 +397,20 @@ export default function ProjectIdeationPage() {
   }, [session, status, router, selectedModule]);
 
   useEffect(() => {
-    if (ideationBalance > 0 && !hasShownBalanceWarning) { // Only show warnings if balance is not zero and not already shown
-      const fiftyPercent = MAX_TOKENS_PER_MENTEE * 0.5;
-      const twentyPercent = MAX_TOKENS_PER_MENTEE * 0.2;
+    const fiftyPercent = MAX_TOKENS_PER_MENTEE * 0.5;
+    const twentyPercent = MAX_TOKENS_PER_MENTEE * 0.2;
 
-      if (ideationBalance <= twentyPercent && ideationBalance > 0) {
-        setShow20PercentWarning(true);
-        setHasShownBalanceWarning(true);
-      } else if (ideationBalance <= fiftyPercent && ideationBalance > twentyPercent) {
-        setShow50PercentWarning(true);
-        setHasShownBalanceWarning(true);
-      }
-    } else if (ideationBalance <= 0 && !hasShownBalanceWarning) {
+    if (ideationBalance <= 0 && !hasShown0PercentWarning) {
       setShow0PercentWarning(true);
-      setHasShownBalanceWarning(true);
+      setHasShown0PercentWarning(true);
+    } else if (ideationBalance <= twentyPercent && ideationBalance > 0 && !hasShown20PercentWarning) {
+      setShow20PercentWarning(true);
+      setHasShown20PercentWarning(true);
+    } else if (ideationBalance <= fiftyPercent && ideationBalance > twentyPercent && !hasShown50PercentWarning) {
+      setShow50PercentWarning(true);
+      setHasShown50PercentWarning(true);
     }
-  }, [ideationBalance, MAX_TOKENS_PER_MENTEE, hasShownBalanceWarning]);
+  }, [ideationBalance, MAX_TOKENS_PER_MENTEE, hasShown50PercentWarning, hasShown20PercentWarning, hasShown0PercentWarning]);
 
   if (isLoading) {
     return (

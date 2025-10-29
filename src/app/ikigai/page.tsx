@@ -117,7 +117,9 @@ export default function IkigaiPage() {
   const [show50PercentWarning, setShow50PercentWarning] = useState(false);
   const [show20PercentWarning, setShow20PercentWarning] = useState(false);
   const [show0PercentWarning, setShow0PercentWarning] = useState(false);
-  const [hasShownBalanceWarning, setHasShownBalanceWarning] = useState(false);
+  const [hasShown50PercentWarning, setHasShown50PercentWarning] = useState(false);
+  const [hasShown20PercentWarning, setHasShown20PercentWarning] = useState(false);
+  const [hasShown0PercentWarning, setHasShown0PercentWarning] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
@@ -275,22 +277,20 @@ export default function IkigaiPage() {
   }, [session, setIkigaiBalance]);
 
   useEffect(() => {
-    if (ikigaiBalance > 0 && !hasShownBalanceWarning) { // Only show warnings if balance is not zero and not already shown
-      const fiftyPercent = MAX_TOKENS_PER_MENTEE * 0.5;
-      const twentyPercent = MAX_TOKENS_PER_MENTEE * 0.2;
+    const fiftyPercent = MAX_TOKENS_PER_MENTEE * 0.5;
+    const twentyPercent = MAX_TOKENS_PER_MENTEE * 0.2;
 
-      if (ikigaiBalance <= twentyPercent && ikigaiBalance > 0) {
-        setShow20PercentWarning(true);
-        setHasShownBalanceWarning(true);
-      } else if (ikigaiBalance <= fiftyPercent && ikigaiBalance > twentyPercent) {
-        setShow50PercentWarning(true);
-        setHasShownBalanceWarning(true);
-      }
-    } else if (ikigaiBalance <= 0 && !hasShownBalanceWarning) {
+    if (ikigaiBalance <= 0 && !hasShown0PercentWarning) {
       setShow0PercentWarning(true);
-      setHasShownBalanceWarning(true);
+      setHasShown0PercentWarning(true);
+    } else if (ikigaiBalance <= twentyPercent && ikigaiBalance > 0 && !hasShown20PercentWarning) {
+      setShow20PercentWarning(true);
+      setHasShown20PercentWarning(true);
+    } else if (ikigaiBalance <= fiftyPercent && ikigaiBalance > twentyPercent && !hasShown50PercentWarning) {
+      setShow50PercentWarning(true);
+      setHasShown50PercentWarning(true);
     }
-  }, [ikigaiBalance, MAX_TOKENS_PER_MENTEE, hasShownBalanceWarning]);
+  }, [ikigaiBalance, MAX_TOKENS_PER_MENTEE, hasShown50PercentWarning, hasShown20PercentWarning, hasShown0PercentWarning]);
 
   if (status === "loading") {
     return (
