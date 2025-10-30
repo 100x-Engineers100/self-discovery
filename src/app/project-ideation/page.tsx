@@ -14,6 +14,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { toast } from "@/components/toast";
 import { Toaster } from "sonner";
 import { ChatMessage } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 interface ModuleContext {
   name: string;
@@ -217,6 +218,7 @@ export default function ProjectIdeationPage() {
   const [ideationBalance, setIdeationBalance] = useState<number>(60000);
   const [show50PercentWarning, setShow50PercentWarning] = useState(false);
   const [show20PercentWarning, setShow20PercentWarning] = useState(false);
+  const [isRecharging, setIsRecharging] = useState(false);
   const [show0PercentWarning, setShow0PercentWarning] = useState(false);
   const [hasShown50PercentWarning, setHasShown50PercentWarning] = useState(false);
   const [hasShown20PercentWarning, setHasShown20PercentWarning] = useState(false);
@@ -460,7 +462,32 @@ export default function ProjectIdeationPage() {
               >
                 Change Module
               </button>
-              <p className="text-lg text-gray-500 mb-4">Start ideating! <span className="text-sm text-gray-400">(Credits: {(ideationBalance/1000).toFixed(0)})</span></p>
+              <p className="text-lg text-gray-500 mb-4 flex items-center gap-2">
+                Start ideating!
+                <span className="text-sm text-gray-400 flex items-center gap-2">
+                  Credits: {(ideationBalance / 1000).toFixed(0)}
+                  {ideationBalance <= 0 && (
+                    <Button
+                      size="sm"
+                      style={{backgroundColor:"#FF6445"}}
+                      onClick={async () => {
+                        setIsRecharging(true);
+                        try {
+                          await handleRequestRecharge();
+                        } catch (error) {
+                          console.error("Failed to send recharge request for Project Ideation:", error);
+                        } finally {
+                          setIsRecharging(false);
+                        }
+                      }}
+                      className="bg-orange-500 text-white cursor-pointer hover:bg-orange-600 p-2 rounded-md h-auto"
+                      disabled={isRecharging}
+                    >
+                      {isRecharging ? "Requesting..." : "Request Recharge"}
+                    </Button>
+                  )}
+                </span>
+              </p>
                 <DataStreamProvider>
                   <Chat
                     key={JSON.stringify(chatHistory)}

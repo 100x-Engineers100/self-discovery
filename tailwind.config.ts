@@ -1,7 +1,7 @@
-import type { Config } from 'tailwindcss';
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ['./src/**/*.{ts,tsx}'],
+  content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -9,11 +9,11 @@ const config: Config = {
       },
       keyframes: {
         spin: {
-          to: { transform: 'rotate(360deg)' },
+          to: { transform: "rotate(360deg)" },
         },
       },
       animation: {
-        spin: 'spin 1s linear infinite',
+        spin: "spin 1s linear infinite",
       },
     },
   },

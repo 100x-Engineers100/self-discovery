@@ -121,6 +121,7 @@ export default function IkigaiPage() {
   const [hasShown20PercentWarning, setHasShown20PercentWarning] = useState(false);
   const [hasShown0PercentWarning, setHasShown0PercentWarning] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [isRecharging, setIsRecharging] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   const MAX_TOKENS_PER_MENTEE = 15000; // Define the max tokens here for percentage calculation
@@ -352,7 +353,29 @@ export default function IkigaiPage() {
         <div className="flex flex-col w-full h-screen p-4 overflow-hidden">
           <div className="flex items-center gap-3">
             <div className="text-2xl font-bold">Ikigai</div>
-            <div className="text-sm text-gray-400">(Credits: {(ikigaiBalance/1000).toFixed(0)})</div>
+            <div className="text-sm text-gray-400 flex items-center gap-2">
+              Credits: {(ikigaiBalance / 1000).toFixed(0)}
+              {ikigaiBalance <= 0 && (
+                <Button
+                  size="sm"
+                  style={{backgroundColor:"#FF6445"}}
+                  onClick={async () => {
+                    setIsRecharging(true);
+                    try {
+                      await handleRequestRecharge(chatHistory);
+                    } catch (error) {
+                      console.error("Failed to send recharge request for Ikigai:", error);
+                    } finally {
+                      setIsRecharging(false);
+                    }
+                  }}
+                  className="bg-orange-500 text-white cursor-pointer hover:bg-orange-600 p-2 rounded-md h-auto"
+                  disabled={isRecharging}
+                >
+                  {isRecharging ? "Requesting..." : "Request Recharge"}
+                </Button>
+              )}
+            </div>
           </div>
           {ikigaiFilled && ikigaiData ? (
             <div className="flex-grow flex flex-col items-center justify-center">
