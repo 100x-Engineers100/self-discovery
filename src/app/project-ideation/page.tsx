@@ -480,7 +480,7 @@ export default function ProjectIdeationPage() {
                           setIsRecharging(false);
                         }
                       }}
-                      className="bg-orange-500 text-white cursor-pointer hover:bg-orange-600 p-2 rounded-md h-auto"
+                      className="bg-[#FF6445] text-white cursor-pointer hover:bg-[#d44a2f] p-2 rounded-md h-auto"
                       disabled={isRecharging}
                     >
                       {isRecharging ? "Requesting..." : "Request Recharge"}

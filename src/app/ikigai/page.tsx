@@ -399,7 +399,7 @@ export default function IkigaiPage() {
                           },
                           {
                             type: "text",
-                            text: "Hello! I'm here to help you discover your Ikigai. Let's start with the first element: **What do you love?** Please share your passions, hobbies, and activities that bring you joy and energy. Think about what truly excites you and makes you lose track of time.",
+                            text: "Hey there! Ready to find your Ikigai? Let's kick things off with the first step: **What do you love to do?** Tell me about the things that really light you up and make you feel energized. What activities make you lose track of time? For instance, do you enjoy solving tricky problems, collaborating with a team, leading a project, coding, designing, or maybe even presenting your ideas? Just share what comes to mind, no need to overthink it!",
                             state: "done"
                           },
                         ],
