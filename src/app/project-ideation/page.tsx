@@ -509,7 +509,7 @@ export default function ProjectIdeationPage() {
               {modules.map((moduleContext) => (
                 <Button
                   key={moduleContext.name}
-                  variant={selectedModule?.name === moduleContext.name ? "default" : "outline"}
+                  variant="default"
                   onClick={() => setSelectedModule(moduleContext)}
                   className="flex flex-col items-start p-4 h-auto text-left font-mono"
                 >
