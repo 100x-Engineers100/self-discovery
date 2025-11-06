@@ -72,12 +72,11 @@ export default function LoginPage() {
         <AuthForm action={formAction}>
           <SubmitButton isSuccessful={state.status === "success"}>Sign In</SubmitButton>
         </AuthForm>
-        <div className="flex flex-col items-center gap-2">
-          <Link href="#" className="text-sm text-[#FF6445] hover:underline">Forgot Password?</Link>
+        {/* <div className="flex flex-col items-center gap-2">
           <p className="text-sm text-gray-500 dark:text-zinc-400">
             Having trouble logging in? <a href="mailto:hello@100xengineers.com" className="text-[#FF6445] hover:underline">hello@100xengineers.com</a>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
