@@ -1,7 +1,7 @@
 "use client";
 
 import { Chat } from "@/components/chat";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -12,13 +12,16 @@ import { generateUUID } from "@/lib/utils";
 import { toast } from "@/components/toast";
 import { DEFAULT_CHAT_MODEL } from "../../lib/ai/models";
 import { IkigaiChartDisplay } from "@/components/ikigai-chart-display";
-import { ChatMessage, ChatTools, CustomUIDataTypes, IkigaiData } from "@/lib/types";
+import { ChatMessage, ChatTools, CustomUIDataTypes, IkigaiData, IkigaiApiResponse, IkigaiDataWithStatus } from "@/lib/types";
 import { Toaster } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UIMessagePart } from "ai";
 import Spinner  from "@/components/ui/spinner";
+import { useRouter, useSearchParams } from "next/navigation";
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas-pro';
 
-async function saveIkigaiAnswers(userId: string, ikigaiDetails: IkigaiData, chatHistory: ChatMessage[]) {
+async function saveIkigaiAnswers(userId: string, chat_number: number, ikigaiDetails: IkigaiData, chatHistory: ChatMessage[]) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
     method: "POST",
     headers: {
@@ -26,6 +29,7 @@ async function saveIkigaiAnswers(userId: string, ikigaiDetails: IkigaiData, chat
     },
     body: JSON.stringify({
       userId,
+      chat_number,
       ...ikigaiDetails,
       chat_history: chatHistory,
     }),
@@ -123,10 +127,40 @@ export default function IkigaiPage() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isRecharging, setIsRecharging] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const MAX_TOKENS_PER_MENTEE = 15000; // Define the max tokens here for percentage calculation
 
   const [ikigaiData, setIkigaiData] = useState<IkigaiData | null>(null);
+
+  const ikigaiChartRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPdf = async () => {
+    const element = ikigaiChartRef.current;
+    if (!element) {
+      console.error("Ikigai chart element not found.");
+      return;
+    }
+
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      scale: 2,
+    });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: "a4",
+    });
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("ikigai-chart.pdf");
+  };
 
   const fetchIkigaiBalance = async () => {
     if (session?.user?.id) {
@@ -204,7 +238,7 @@ export default function IkigaiPage() {
           if (session?.user?.id) {
             const ikigaiDetails = parsedIkigaiData;
             
-            await saveIkigaiAnswers(session.user.id, ikigaiDetails, messages);
+            await saveIkigaiAnswers(session.user.id, currentChatNumber, ikigaiDetails, messages);
             toast({
               description: "Your Ikigai chart has been saved.",
               type: "success",
@@ -248,30 +282,60 @@ export default function IkigaiPage() {
         try {
           const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${session.user.id}`);
           if (response.ok) {
-            const data = await response.json();
-            if (data && data?.ikigai_details?.status === 'complete') {
-              setIkigaiFilled(true);
-              setIkigaiData(data.ikigai_details);
-            } else {
-              setIkigaiFilled(false);
-              setIkigaiData(null);
-              
-              if (data.chat_history) {
-                setChatHistory(data.chat_history);
+            const ikigaiDataList: IkigaiApiResponse[] = await response.json(); // This is now an array
+            const chatNumberParam = searchParams.get("chatNumber");
+            
+            if (!chatNumberParam && ikigaiDataList && ikigaiDataList.length > 0) {
+              const latestChat = ikigaiDataList.sort((a, b) => b.chat_number - a.chat_number)[0];
+              if (latestChat) {
+                router.push(`/ikigai?chatNumber=${latestChat.chat_number}`);
+                // No need to proceed further as we are redirecting
+                return;
               }
             }
+
+            const currentChatNumber = chatNumberParam ? parseInt(chatNumberParam, 10) : undefined;
+
+            let selectedIkigaiData: IkigaiApiResponse | null = null;
+            let selectedChatHistory: ChatMessage[] = [];
+
+            if (ikigaiDataList && ikigaiDataList.length > 0) {
+              if (currentChatNumber !== undefined) {
+                // Find the specific chat session if chatNumber is in URL
+                selectedIkigaiData = ikigaiDataList.find((data) => data.chat_number === currentChatNumber) || null;
+              } else {
+                // If no chatNumber in URL, find the latest chat session
+                selectedIkigaiData = ikigaiDataList.sort((a, b) => b.chat_number - a.chat_number)[0];
+              }
+
+              if (selectedIkigaiData) {
+                setIkigaiFilled(selectedIkigaiData.ikigai_details?.status === 'complete');
+                setIkigaiData(selectedIkigaiData.ikigai_details);
+                selectedChatHistory = selectedIkigaiData.chat_history || [];
+              } else {
+                // If a specific chatNumber was requested but not found, default to latest or empty
+                setIkigaiFilled(false);
+                setIkigaiData(null);
+              }
+            } else if (currentChatNumber === undefined) {
+              setIkigaiFilled(false);
+              setIkigaiData(null);
+              selectedChatHistory = [];
+            }
+
+            setChatHistory(selectedChatHistory);
           } else {
             console.error("Failed to fetch Ikigai status:", response.statusText);
           }
         } catch (error) {
           console.error("Error fetching Ikigai status:", error);
         } finally {
-          setIsLoading(false); // Set loading to false after fetching (success or error)
+          setIsLoading(false);
         }
       }
     };
     fetchIkigaiStatus();
-  }, [session]);
+  }, [session, router, searchParams]); 
 
   useEffect(() => {
     fetchIkigaiBalance();
@@ -312,7 +376,7 @@ export default function IkigaiPage() {
   if (!session?.user) {
     return (
       <div className="flex flex-col h-full items-center justify-center">
-        <p className="text-lg text-gray-500">Please log in to view your Ikigai chart.</p>
+        <p className="text-lg text-gray-500 font-mono">Please log in to view your Ikigai chart.</p>
       </div>
     );
   }
@@ -347,14 +411,32 @@ export default function IkigaiPage() {
     setIkigaiData(null);
   };
 
+  const currentChatNumber = searchParams.get("chatNumber") ? parseInt(searchParams.get("chatNumber") as string, 10) : 1;
+
   return (
     <SidebarProvider>
-      <AppSidebar user={session?.user} activePath="/ikigai">
+      <AppSidebar user={session?.user} activePath="/ikigai" chatNumber={currentChatNumber}>
         <div className="flex flex-col w-full h-screen p-4 overflow-hidden">
-          <div className="flex items-center gap-3">
-            <div className="text-2xl font-bold">Ikigai</div>
-            <div className="text-sm text-gray-400 flex items-center gap-2">
-              Credits: {(ikigaiBalance / 1000).toFixed(0)}
+          <div className="flex items-center justify-between gap-3 pb-4">
+            <div className="flex items-center gap-2">
+              <div className="text-2xl font-bold font-mono">Ikigai</div>
+              <div className="text-sm text-gray-400 flex items-center gap-2">
+                {ikigaiFilled && (
+                  <Button
+                    onClick={handleDownloadPdf}
+                    className="ml-2 p-2 bg-[#FF6445] text-white rounded-md hover:bg-[#FF4B3A]"
+                    size="sm"
+                  >
+                    Download PDF
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end items-center gap-2">
+              <div className="bg-gray-100 p-2 text-black rounded-md font-mono">
+                Credits: <span className="text-orange-500 font-semibold">{(ikigaiBalance / 1000).toFixed(0)}</span>
+              </div>
               {ikigaiBalance <= 0 && (
                 <Button
                   size="sm"
@@ -377,13 +459,20 @@ export default function IkigaiPage() {
               )}
             </div>
           </div>
-          {ikigaiFilled && ikigaiData ? (
+          {/* Hidden div for PDF generation */} 
+          {ikigaiFilled && ikigaiData && (
+            <div ref={ikigaiChartRef} style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+              <IkigaiChartDisplay ikigaiData={ikigaiData} />
+            </div>
+          )}
+
+          {/* ikigaiFilled && ikigaiData ? (
             <div className="flex-grow flex flex-col items-center justify-center">
               <IkigaiChartDisplay ikigaiData={ikigaiData} />
               <Button onClick={handleNewIkigai} className="mt-4">Chat for new Ikigai</Button>
             </div>
-          ) : (
-            <div className="flex-grow flex flex-col">
+          ) : ( */}
+            <div className="flex-grow flex flex-col" >
               <div className="flex-grow overflow-y-auto">
                 <DataStreamProvider>
                   <Chat
@@ -399,7 +488,7 @@ export default function IkigaiPage() {
                           },
                           {
                             type: "text",
-                            text: "Hey there! Ready to find your Ikigai? Let's kick things off with the first step: **What do you love to do?** Tell me about the things that really light you up and make you feel energized. What activities make you lose track of time? For instance, do you enjoy solving tricky problems, collaborating with a team, leading a project, coding, designing, or maybe even presenting your ideas? Just share what comes to mind, no need to overthink it!",
+                            text: "Welcome to 100xEngineers! We’ll help you discover your Ikigai—where your passions, strengths, and career align. This process will guide you to find work that feels fulfilling and impactful. When you finish a task and feel truly satisfied, what kind of work is it? Examples: a) Building software and mentoring peers b) Designing intuitive interfaces c) Solving complex problems and sharing insights",
                             state: "done"
                           },
                         ],
@@ -418,11 +507,12 @@ export default function IkigaiPage() {
                     balance={ikigaiBalance}
                     setBalance={setIkigaiBalance}
                     disabled={ikigaiBalance <= 0}
+                    chatNumber={currentChatNumber}
                   />
                 </DataStreamProvider>
               </div>
             </div>
-          )}
+          {/* )} */}
 
           <AlertDialog open={showNewIkigaiWarning} onOpenChange={setShowNewIkigaiWarning}>
             <AlertDialogContent>

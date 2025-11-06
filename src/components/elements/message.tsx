@@ -18,7 +18,7 @@ export type MessageProps = HTMLAttributes<HTMLDivElement> & {
 export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
-      "group flex w-full gap-2 py-4",
+      "group flex w-full gap-2 py-4 font-mono",
       from === "user"
         ? "is-user items-end justify-end"
         : "is-assistant items-start justify-start",
@@ -38,7 +38,7 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "flex flex-col gap-2 overflow-hidden rounded-lg px-4 py-3 text-foreground text-sm",
+      "flex flex-col gap-2 overflow-hidden rounded-lg px-4 py-3 text-foreground text-sm font-mono",
       "group-[.is-user]:bg-secondary group-[.is-user]:text-primary-foreground",
       "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground",
       "is-user:dark",
@@ -145,5 +145,5 @@ export const PreviewMessage = ({
 };
 
 export const ThinkingMessage = ({ children, ...props }: HTMLAttributes<HTMLDivElement>) => (
-  <div {...props}>Thinking...</div>
+  <div {...props} className="font-mono">Thinking...</div>
 );

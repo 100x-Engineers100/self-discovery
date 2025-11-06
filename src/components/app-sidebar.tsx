@@ -19,7 +19,6 @@ import {
   SidebarMenu,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,27 +29,82 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { format } from "date-fns";
+import { IkigaiApiResponse } from "@/lib/types";
 
 interface AppSidebarProps {
   children: React.ReactNode;
   activePath: string; // Add activePath prop
   user: User | undefined; // Add user prop
+  chatNumber?: number;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
+export function AppSidebar({ children, activePath, user, chatNumber }: AppSidebarProps) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
   const { mutate } = useSWRConfig();
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
-  const { data: ikigaiData, error: ikigaiError, isLoading: isIkigaiDataLoading } = useSWR(
+  const handleNewChat = async () => {
+    if (!user?.id) {
+      toast.error("User not authenticated.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          chat_history: [],
+          what_you_love: "",
+          what_you_are_good_at: "",
+          what_world_needs: "",
+          what_you_can_be_paid_for: "",
+          your_ikigai: "",
+          explanation: "",
+          next_steps: "",
+          status: "ongoing",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create new chat");
+      }
+
+      const data = await response.json();
+      const newChatNumber = data.chat_number; // Changed from data.newChatNumber to data.chatNumber
+
+      if (newChatNumber) {
+        mutate(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${user.id}`);
+        router.push(`/ikigai?chatNumber=${newChatNumber}`);
+        setOpenMobile(false);
+      } else {
+        toast.error("Failed to get new chat number.");
+      }
+    } catch (error) {
+      console.error("Error creating new chat:", error);
+      toast.error("Failed to create new chat.");
+    }
+  };
+
+  const { data: ikigaiDataList, error: ikigaiError, isLoading: isIkigaiDataLoading } = useSWR(
     user ? `${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${user.id}` : null,
     fetcher
   );
 
-  const isIkigaiComplete = ikigaiData?.ikigai_details?.status === "complete";
+  const latestIkigaiData = ikigaiDataList && ikigaiDataList.length > 0 
+    ? ikigaiDataList
+        .filter((ikigai: IkigaiApiResponse) => ikigai.ikigai_details?.status === "complete")
+        .sort((a: IkigaiApiResponse, b: IkigaiApiResponse) => b.chat_number - a.chat_number)[0] 
+    : null;
+
+  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "complete";
 
   const handleNavigation = (e: React.MouseEvent, path: string) => {
     if (isIkigaiDataLoading) {
@@ -72,7 +126,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
   const handleDeleteAll = () => {
     // Removed history API call
     toast.promise(Promise.resolve(), {
-      // loading: "Deleting all chats...",
+      // loading: "Deleting all chats...in progress",
       success: () => {
         router.push("/");
         setShowDeleteAllDialog(false);
@@ -140,16 +194,50 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
             </div>
             {user && (
               <div className="mt-4 flex flex-col gap-2">
+                <div className="border-b border-black"></div>
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",
                     activePath === "/ikigai" ? "bg-[#FF6445] text-white" : "text-black bg-gray-200"
                   )}
-                  href="/ikigai"
+                  href={latestIkigaiData ? `/ikigai?chatNumber=${latestIkigaiData.chat_number}` : "/ikigai"}
                   onClick={() => setOpenMobile(false)}
                 >
                   Ikigai
                 </Link>
+                {activePath === "/ikigai" && (
+                  <div className="flex flex-col gap-2 pl-4">
+                    <Button
+                      className="w-auto h-auto flex items-center gap-3 rounded-md p-1 font-semibold text-md bg-[#FF6445] text-white hover:bg-[#FF4B3A]"
+                      onClick={handleNewChat}
+                    >
+                      <PlusIcon size={16} /> New Chat
+                    </Button>
+                    <h3 className="text-sm font-semibold text-gray-500 mt-2">Chats</h3>
+                    <div className="flex flex-col gap-1">
+                      {ikigaiDataList && ikigaiDataList.length > 0 ? (
+                        ikigaiDataList
+                          .sort((a: IkigaiApiResponse, b: IkigaiApiResponse) => b.chat_number - a.chat_number) // Sort by latest chat_number first
+                          .map((chat: IkigaiApiResponse, index: number) => (
+                            <Link
+                              key={chat.chat_number || index}
+                              href={`/ikigai?chatNumber=${chat.chat_number}`}
+                              onClick={() => setOpenMobile(false)}
+                              className={cn(
+                                "text-sm text-gray-700 hover:text-gray-900 p-2 rounded-md",
+                                chat.chat_number === chatNumber && "bg-gray-300 text-black"
+                              )}
+                            >
+                              Chat {chat.chat_number} - {format(new Date(chat.created_at || Date.now()), "MMM d, yyyy")}
+                            </Link>
+                          ))
+                      ) : (
+                        <div className="text-sm text-gray-700 p-2">No chats yet.</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className="border-b border-black pb-2 mb-2"></div>
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",
@@ -160,6 +248,7 @@ export function AppSidebar({ children, activePath, user }: AppSidebarProps) {
                 >
                   Project Ideation
                 </Link>
+                <div className="border-b border-black pb-2 mb-2"></div>
                 <Link
                   className={cn(
                     "flex flex-row items-center gap-3 rounded-md px-2 py-1 font-semibold text-lg",

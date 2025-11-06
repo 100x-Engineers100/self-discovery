@@ -16,19 +16,19 @@ export function AuthForm({
     <Form action={action} className="flex flex-col gap-4 px-4 sm:px-16">
       <div className="flex flex-col gap-2">
         <Label
-          className="font-normal text-zinc-600 dark:text-zinc-400"
+          className="font-normal text-[#FF6445] text-xs uppercase"
           htmlFor="email"
         >
-          Email Address
+          Email
         </Label>
 
         <Input
           autoComplete="email"
           autoFocus
-          className="bg-muted text-md md:text-sm"
+          className="bg-gray-100 text-black text-sm border-none focus:ring-0 focus:ring-offset-0"
           id="email"
           name="email"
-          placeholder="user@acme.com"
+          placeholder="Enter your Email ID"
           required
           type="email"
         />
@@ -36,16 +36,17 @@ export function AuthForm({
 
       <div className="flex flex-col gap-2">
         <Label
-          className="font-normal text-zinc-600 dark:text-zinc-400"
+          className="font-normal text-[#FF6445] text-xs uppercase"
           htmlFor="password"
         >
           Password
         </Label>
 
         <Input
-          className="bg-muted text-md md:text-sm"
+          className="bg-gray-100 text-black text-sm border-none focus:ring-0 focus:ring-offset-0"
           id="password"
           name="password"
+          placeholder="Enter your Password"
           required
           type="password"
         />

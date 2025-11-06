@@ -89,22 +89,22 @@ export default function CohortRoadmapPage() {
     <SidebarProvider>
       <AppSidebar user={session?.user} activePath="/cohort-roadmap">
         <div className="flex-1 flex flex-col p-4 bg-white min-h-screen">
-          <h1 className="text-3xl font-extrabold mb-6 text-[#FF6445]">Your Personalized Roadmap</h1>
+          <h1 className="text-3xl font-extrabold mb-6 text-[#FF6445] font-mono">Your Personalized Roadmap</h1>
           <div className="space-y-8">
             {Object.entries(groupedRoadmap).map(([module_name, weeks]) => (
               <div key={module_name} className="bg-white p-6 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-[#FF6445]">{module_name}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-[#FF6445] font-mono">{module_name}</h2>
                 {Object.entries(weeks).map(([week_number, sessions]) => (
                   <div key={week_number} className="ml-4 mt-4 border-l-2 border-[#FF6445] pl-4">
-                    <h3 className="text-xl font-semibold mb-3 text-[#FF6445]">Week: {week_number}</h3>
+                    <h3 className="text-xl font-semibold mb-3 text-[#FF6445] font-mono">Week: {week_number}</h3>
                     {Object.entries(sessions).map(([session_name, items]) => (
                       <div key={session_name} className="ml-4 mt-3 border-l-2 border-[#FF6445] pl-4">
-                        <h4 className="text-lg font-medium mb-2 text-[#FF6445]">Session: {session_name}</h4>
+                        <h4 className="text-lg font-medium mb-2 text-[#FF6445] font-mono">Session: {session_name}</h4>
                         <ul className="list-inside space-y-1">
                           {items.map((item, index) => (
-                            <li key={index} className="text-[#FF6445]">
-                              <p className="font-semibold text-[#FF6445]">Outcome-based: <span className="font-normal">{item.outcome_based_msg}</span></p>
-                              <p className="font-semibold text-[#FF6445]">Project-based: <span className="font-normal">{item.project_based_msg}</span></p>
+                            <li key={index} className="text-[#FF6445] font-mono">
+                              <p className="font-semibold text-[#FF6445] font-mono">Outcome-based: <span className="font-normal">{item.outcome_based_msg}</span></p>
+                              <p className="font-semibold text-[#FF6445] font-mono">Project-based: <span className="font-normal">{item.project_based_msg}</span></p>
                             </li>
                           ))}
                         </ul>

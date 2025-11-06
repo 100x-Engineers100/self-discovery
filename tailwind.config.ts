@@ -4,6 +4,10 @@ const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-cooper-black)"],
+        mono: ["var(--font-jetbrains-mono)"],
+      },
       colors: {
         "custom-orange": "#FF6445",
       },

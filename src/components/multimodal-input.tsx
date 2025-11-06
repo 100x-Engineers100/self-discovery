@@ -254,7 +254,7 @@ function PureMultimodalInput({
         )} */}
 
       <input
-        className="-top-4 -left-4 pointer-events-none fixed size-0.5 opacity-0"
+        className="-top-4 -left-4 pointer-events-none fixed size-0.5 opacity-0 font-mono"
         multiple
         onChange={handleFileChange}
         ref={fileInputRef}

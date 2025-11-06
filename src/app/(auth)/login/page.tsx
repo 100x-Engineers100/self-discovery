@@ -3,6 +3,7 @@
 import { useEffect ,useActionState} from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react"; // Import signIn and useSession from next-auth/react
+import Image from "next/image"; // Import Image component
 
 import { login, type LoginActionState } from "../actions";
 import { AuthForm } from "@/components/auth-form";
@@ -47,18 +48,36 @@ export default function LoginPage() {
   }, [state, router, updateSession]);
 
   return (
-    <div className="flex h-dvh w-screen items-start justify-center bg-background pt-12 md:items-center md:pt-0">
-      <div className="flex w-full max-w-md flex-col gap-12 overflow-hidden rounded-2xl border-2 border-[#FF6445] p-8 shadow-lg">
+    <div className="relative flex h-dvh w-screen items-center justify-end bg-white">
+      <div className="h-full w-full">
+        <Image
+          src="/ikigai-login.png"
+          alt="Login Background"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
+      </div>
+      <div className="relative z-10 flex w-full max-w-md flex-col gap-12 overflow-hidden rounded-2xl bg-white p-8 shadow-lg md:max-w-lg lg:max-w-xl mr-20">
         <div className="flex flex-col items-center justify-center gap-4 px-4 text-center sm:px-16">
-          <img src="/100xEngineers-black.svg" alt="100xEngineers" className="h-12 w-auto" />
-          <h3 className="font-semibold text-xl dark:text-zinc-50">Sign In</h3>
-          <p className="text-gray-500 text-sm dark:text-zinc-400">
-            Use your email and password to sign in
+          <img src="/100xEngineers-black.svg" alt="100xEngineers" className="h-6 w-auto" />
+        </div>
+        <h2 className="text-center text-4xl tracking-tight">Welcome, cohort member 👋</h2>
+        <div className="flex flex-col gap-2 text-center">
+          <h3 className="text-2xl tracking-tight">Sign in to continue</h3>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">
+            Use the email you registered for the cohort with.
           </p>
         </div>
         <AuthForm action={formAction}>
-          <SubmitButton isSuccessful={state.status === "success"}>Sign in</SubmitButton>
+          <SubmitButton isSuccessful={state.status === "success"}>Sign In</SubmitButton>
         </AuthForm>
+        <div className="flex flex-col items-center gap-2">
+          <Link href="#" className="text-sm text-[#FF6445] hover:underline">Forgot Password?</Link>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">
+            Having trouble logging in? <a href="mailto:hello@100xengineers.com" className="text-[#FF6445] hover:underline">hello@100xengineers.com</a>
+          </p>
+        </div>
       </div>
     </div>
   );

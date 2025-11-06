@@ -17,6 +17,21 @@ export interface IkigaiData {
   explanation: string;
   next_steps: string;
   chat_history?: ChatMessage[];
+  chat_number?: number;
+}
+
+export interface IkigaiApiResponse {
+  id: string;
+  user_id: string;
+  chat_number: number;
+  chat_history: ChatMessage[];
+  ikigai_details: IkigaiDataWithStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IkigaiDataWithStatus extends IkigaiData {
+  status?: string;
 }
 
 export type DataPart = { type: "append-message"; message: string };

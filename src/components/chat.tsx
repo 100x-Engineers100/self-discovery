@@ -48,7 +48,7 @@ export type ChatProps = {
   autoResume: boolean;
   initialLastContext?: AppUsage;
   isIkigaiChat?: boolean;
-  saveIkigaiAnswers?: (userId: string, ikigaiData: IkigaiData, messages: ChatMessage[]) => Promise<void>;
+  saveIkigaiAnswers?: (userId: string, chat_number: number, ikigaiData: IkigaiData, messages: ChatMessage[]) => Promise<void>;
   onChatFinish?: (text: string, messages: ChatMessage[]) => Promise<void>;
   userId?: string;
   balance: number;
@@ -61,6 +61,7 @@ export type ChatProps = {
   balanceType?: string; // Add balanceType prop
   hideModelAndAttachments?: boolean; // New prop to hide model selection and attachments
   disabled?: boolean; // Add disabled prop
+  chatNumber?: number; // Add chatNumber prop
 };
 
 export function Chat({
@@ -86,6 +87,7 @@ export function Chat({
   balanceType,
   disabled, // Add disabled prop
   hideModelAndAttachments, // Destructure the new prop
+  chatNumber, // Destructure chatNumber prop
 }: ChatProps) {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
@@ -107,6 +109,8 @@ export function Chat({
 const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsage | undefined>(undefined);
   const [cumulativeTokens, setCumulativeTokens] = useState<number>(0);
   const remainingCredits = balance !== null ? balance - (cumulativeTokens / CREDIT_CONVERSION_RATE) : 0;
+
+  const [currentChatNumber, setCurrentChatNumber] = useState<number | undefined>(chatNumber);
 
   useEffect(() => {
     currentModelIdRef.current = currentModelId;
@@ -217,6 +221,8 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
       api: api,
       fetch: fetchWithErrorHandlers,
       prepareSendMessagesRequest(request) {
+        console.log("prepareSendMessagesRequest", request.messages);
+        
         return {
           body: {
             messages: convertToModelMessages(request.messages),
@@ -226,6 +232,7 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
             systemPrompt: systemPrompt,
             moduleContext: moduleContext,
             userIkigaiData: userIkigaiData,
+            chat_number: currentChatNumber, // Pass the current chat number
             // chatHistory: request.messages, // Pass the full messages array as chatHistory
           },
         };
@@ -304,6 +311,8 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
 
               setChatHistory(chatHistory);
 
+              console.log("chat_number", currentChatNumber);
+
               fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
                 method: 'POST',
                 headers: {
@@ -312,7 +321,8 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
                 body: JSON.stringify({
                   userId: currentUserId,
                   chat_history: chatHistory,
-                  status: 'ongoing'
+                  status: 'ongoing',
+                  chat_number: currentChatNumber, // Pass currentChatNumber for ongoing chats
                 }),
               }).catch(error => {
                 console.error('Error saving chat history:', error);
@@ -393,12 +403,13 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
 
               // Add chat history to ikigai data
               const completeIkigaiData = {
+                chat_number: currentChatNumber, // Add currentChatNumber
                 ...ikigaiData,
                 status: 'complete'
               };
               
               if (saveIkigaiAnswers && userId) {
-                await saveIkigaiAnswers(userId, completeIkigaiData, chatHistory);
+                await saveIkigaiAnswers(userId, currentChatNumber!, completeIkigaiData, chatHistory);
               }
               
               // Also save to the user_ikigai_data table directly
@@ -410,6 +421,7 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
                 body: JSON.stringify({ 
                   userId: userId, 
                   chat_history: chatHistory,
+                  chat_number: currentChatNumber, // Pass currentChatNumber for final save
                   ...completeIkigaiData
                 }),
               }).catch(error => {
@@ -455,7 +467,7 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
               };
               
               if (saveIkigaiAnswers && userId) {
-                await saveIkigaiAnswers(userId, completeIkigaiData, chatHistory);
+                await saveIkigaiAnswers(userId, currentChatNumber!, completeIkigaiData, chatHistory);
               }
               // Fetch and update balance after saving ongoing Ikigai data
               if (userId) {
@@ -590,7 +602,7 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
           />
         {/* </div> */}
 
-        <div className="sticky z-1 mx-auto flex w-full gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4" style={{bottom: isIkigaiChat ? "0" : "-20px"}}>
+        <div className="sticky z-1 mx-auto flex w-full gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4" style={{bottom: isIkigaiChat ? "0" : "-20px", marginBottom: isIkigaiChat ? "30px" : "0"}}>
           {!isReadonly && (
             <MultimodalInput
               attachments={attachments}

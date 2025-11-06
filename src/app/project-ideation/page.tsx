@@ -99,7 +99,7 @@ const modules: ModuleContext[] = [
   },
   {
     name: "Module 3: Large Language Models",
-    description: "Explore the foundations, advanced concepts, and implementation of Large Language Models.",
+    description: "Foundations, advanced concepts, and implementation of LLMs.",
     learningOutcomes: [
       "Understanding of LLM ecosystem",
       "Basic LLM implementation skills",
@@ -136,7 +136,7 @@ const modules: ModuleContext[] = [
   },
   {
     name: "Module 4: AI Agents",
-    description: "Delve into AI Agents, multi-agent systems, and their production implementation.",
+    description: "AI Agents, multi-agent systems, and production implementation.",
     learningOutcomes: [
       "Understanding of agent architecture",
       "Basic agent implementation skills",
@@ -192,7 +192,68 @@ ${modulePrompt}
 
 ${samplesPrompt}
 
-You are an AI assistant helping a mentee ideate a project problem statement and solution. The mentee might provide their own ideas, and your role is to help them refine and update those ideas, ensuring they are concise, clear, and address a real-world need. You should also help them define a list of features for the project. If the mentee asks questions not related to project ideation, simply reply by saying: "I am here to help you with project ideation. Please focus on discussing your project ideas." If the mentee agrees to save a project idea, you MUST respond with the keyword PROJECT_IDEA_AGREED_TO_SAVE followed by a JSON object containing the problemStatement, solution, and a comma-separated string of features. For example: PROJECT_IDEA_AGREED_TO_SAVE: { "problemStatement": "...", "solution": "...", "features": "feature1, feature2, feature3" }`
+You are an AI assistant whose role is to help a mentee ideate, refine, and evaluate practical project problem statements and solutions tied to a learning module. Use the contextual inputs above (Mentee Ikigai data if present, Module Context, and Project Samples) to produce targeted, non-generic, and actionable project suggestions at appropriate difficulty levels. Follow these rules exactly:
+
+A. Collaboration and tone
+  1) Be collaborative and iterative: if the mentee gives an idea, refine it — do not replace or force-fit it. Acknowledge the mentee's input first, then propose improvements.
+  2) Keep language concrete and specific. Avoid vague outputs like "make an AI app" without details.
+  3) Ask clarifying questions only when needed. Do not guess critical constraints (time, target user, tech preference).
+
+B. Output format for suggestions (use this exact field order; keep each field concise)
+  - Title: short, specific name (<= 6 words)
+  - Level: "easy" or "medium" (use only these two)
+  - Problem Statement: 1–2 sentences, specific user pain or gap
+  - Solution Summary: 1–2 sentences on how the project solves it
+  - Why this fits (rationale): 1–2 sentences linking to module outcomes, mentee Ikigai (if available), or a Project Sample
+  - Required skills: 3–6 short phrases (mix technical + soft skills)
+  - Estimated effort: rough solo estimate (e.g., "10–20 hours")
+  - Key features: 3–6 comma-separated items
+  - Acceptance criteria: 2 concise, measurable checks
+
+C. Number and granularity of suggestions
+  1) Always present at least two proposals: one "easy" and one "medium".
+  2) Optionally add one alternate variation only if it adds real value.
+  3) Keep each proposal compact; avoid long essays.
+
+D. Reasoning, mapping, and specificity
+  1) For each proposal, explicitly name which Module Context learning outcome(s) it addresses (quote verbatim).
+  2) If Ikigai data exists, include a one-line mapping showing which Ikigai elements the project leverages (e.g., uses "teaching" + "React").
+  3) If inspired by a Project Sample, cite: "Inspired by: Project Sample N: <title>".
+
+E. Avoiding generic/force-fit outputs
+  1) Each problem statement must describe a specific user or situation (who, what, why).
+  2) Avoid grand claims. Scope to a realistic MVP. Note constraints if relevant.
+  3) Provide at least 3 concrete features per project that demonstrate how it works.
+
+F. When the mentee supplies an idea
+  1) Echo their original idea (one sentence), then present a refined Problem Statement and Solution Summary.
+  2) Provide 3–5 focused features and 2 acceptance criteria.
+  3) Ask one targeted clarifying question if any critical constraint is missing (time, user, tech).
+
+G. Clarifying questions and constraints
+  1) If context is insufficient to produce useful easy/medium proposals, ask up to two short clarifying questions (one at a time), then wait for the reply before proposing.
+
+H. Tone and verbosity limits
+  1) Any reply that proposes ideas must be <= 450 words.
+  2) Use bullets and short sentences. No marketing fluff.
+
+I. Safety and honesty
+  1) Do not invent credentials, datasets, or external system behavior. If assuming a resource, mark it as "(Assumption: ...)".
+  2) If a feature requires external APIs or paid services, add a one-line note under risks/dependencies.
+
+J. Saving behavior (mandatory)
+  1) If the mentee explicitly agrees to save an idea, respond EXACTLY with:
+     PROJECT_IDEA_AGREED_TO_SAVE: { "problemStatement": "...", "solution": "...", "features": "feature1, feature2, feature3" }
+     Do not add any extra text before or after this line.
+
+K. Off-topic handling (mandatory)
+  1) If the mentee asks something not related to project ideation, reply exactly:
+     "I am here to help you with project ideation. Please focus on discussing your project ideas."
+     Then re-ask the most recent ideation question or continue the current flow.
+
+L. Final quality checks before output
+  1) Each idea must include: explicit user problem, concrete solution, 3+ features, estimated effort, and 2 acceptance criteria.
+`
 };
 
 const projectSamples: ProjectSample[] = [
@@ -392,7 +453,7 @@ export default function ProjectIdeationPage() {
           }
           await fetchUserIkigaiData();
         }
-        setIsLoading(false); // Set loading to false after all data is fetched
+        setIsLoading(false); 
       };
       fetchAllUserData();
     }
@@ -435,37 +496,47 @@ export default function ProjectIdeationPage() {
       <AppSidebar user={session?.user} activePath="/project-ideation">
         <div className="flex flex-col w-full h-screen p-4 overflow-hidden">
           <Head>
-            <title>Project Ideation</title>
+            <title className="font-mono">Project Ideation</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
-          <h1 className="text-2xl font-bold mb-4">Project Ideation</h1>
+          <h1 className="text-2xl font-bold mb-4 font-mono">Project Ideation</h1>
 
           {!selectedModule ? (
-            <div className="grid grid-cols-2 gap-4">
-              {modules.map((module) => (
-                <div
-                  key={module.name}
-                  className="cursor-pointer border rounded-lg p-4 hover:shadow-lg transition-shadow"
-                  onClick={() => setSelectedModule(module)}
+            <>
+            <h2 className="text-xl font-bold tracking-tight font-mono">Select a module to ideate your project</h2>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              {modules.map((moduleContext) => (
+                <Button
+                  key={moduleContext.name}
+                  variant={selectedModule?.name === moduleContext.name ? "default" : "outline"}
+                  onClick={() => setSelectedModule(moduleContext)}
+                  className="flex flex-col items-start p-4 h-auto text-left font-mono"
                 >
-                  <h2 className="text-xl font-semibold">{module.name}</h2>
-                </div>
+                  <span className="text-lg font-semibold">{moduleContext.name}</span>
+                  <span className="text-sm text-muted-foreground mt-1">
+                    {moduleContext.description}
+                  </span>
+                </Button>
               ))}
             </div>
+            </>
           ) : (
             <div className="w-full">
-              <h2 className="text-2xl font-bold mb-4">Selected Module: {selectedModule.name}</h2>
-              <button
-                className="mb-4 px-4 py-2 bg-[#FF6445] text-white rounded hover:bg-[#d44a2f]"
-                onClick={() => setSelectedModule(null)}
-              >
-                Change Module
-              </button>
-              <p className="text-lg text-gray-500 mb-4 flex items-center gap-2">
-                Start ideating!
-                <span className="text-sm text-gray-400 flex items-center gap-2">
-                  Credits: {(ideationBalance / 1000).toFixed(0)}
+              <div className="flex justify-between items-center gap-4 pb-3">
+                <div className="flex items-center gap-6"> 
+                  <h2 className="text-xl font-bold font-mono">{selectedModule.name}</h2>
+                  <button
+                    className="px-2 py-1 bg-[#FF6445] text-md cursor-pointer text-white rounded hover:bg-[#d44a2f] font-mono"
+                    onClick={() => setSelectedModule(null)}
+                  >
+                    Change Module
+                  </button>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="bg-gray-100 p-2 rounded-md font-mono">
+                    Credits: <span className="text-orange-500 font-semibold">{(ideationBalance / 1000).toFixed(0)}</span>
+                  </div>
                   {ideationBalance <= 0 && (
                     <Button
                       size="sm"
@@ -480,15 +551,15 @@ export default function ProjectIdeationPage() {
                           setIsRecharging(false);
                         }
                       }}
-                      className="bg-[#FF6445] text-white cursor-pointer hover:bg-[#d44a2f] p-2 rounded-md h-auto"
+                      className="bg-[#FF6445] text-white cursor-pointer hover:bg-[#d44a2f] p-2 rounded-md h-auto font-mono"
                       disabled={isRecharging}
                     >
                       {isRecharging ? "Requesting..." : "Request Recharge"}
                     </Button>
                   )}
-                </span>
-              </p>
-                <DataStreamProvider>
+                </div>
+              </div>
+              <DataStreamProvider>
                   <Chat
                     key={JSON.stringify(chatHistory)}
                     id="project-ideation"
@@ -504,7 +575,7 @@ export default function ProjectIdeationPage() {
                           },
                           {
                             type: "text",
-                            text: `Hello! I'm here to help you ideate project ideas for "${selectedModule.name}". You can either tell me your own project idea to refine, or ask me for suggestions based on the module's topics and your Ikigai data. How would you like to start?`,
+                            text: `Hello! I\'m here to help you ideate project ideas for "${selectedModule.name}". You can either tell me your own project idea to refine, or ask me for suggestions based on the module\'s topics and your Ikigai data. How would you like to start?`,
                             state: "done"
                           },
                         ],
@@ -532,13 +603,13 @@ export default function ProjectIdeationPage() {
           <AlertDialog open={show50PercentWarning} onOpenChange={setShow50PercentWarning}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Ideation Balance Low</AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogTitle className="font-mono">Ideation Balance Low</AlertDialogTitle>
+                <AlertDialogDescription className="font-mono">
                   Your project ideation chat balance is at 50%. Please use your remaining tokens wisely.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogAction onClick={() => setShow50PercentWarning(false)}>OK</AlertDialogAction>
+                <AlertDialogAction onClick={() => setShow50PercentWarning(false)} className="font-mono">OK</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -547,13 +618,13 @@ export default function ProjectIdeationPage() {
           <AlertDialog open={show20PercentWarning} onOpenChange={setShow20PercentWarning}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Ideation Balance Critical</AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogTitle className="font-mono">Ideation Balance Critical</AlertDialogTitle>
+                <AlertDialogDescription className="font-mono">
                   Your project ideation chat balance is at 20%. Please use your remaining tokens wisely.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogAction onClick={() => setShow20PercentWarning(false)}>OK</AlertDialogAction>
+                <AlertDialogAction onClick={() => setShow20PercentWarning(false)} className="font-mono">OK</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -562,14 +633,14 @@ export default function ProjectIdeationPage() {
           <AlertDialog open={show0PercentWarning} onOpenChange={setShow0PercentWarning}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Ideation Balance Empty</AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogTitle className="font-mono">Ideation Balance Empty</AlertDialogTitle>
+                <AlertDialogDescription className="font-mono">
                   Your project ideation chat balance is at 0%. To continue using the chat, please click the &apos;Request Recharge&apos; button, and our 100x team will review your request.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setShow0PercentWarning(false)}>Close</AlertDialogCancel>
-                <AlertDialogAction onClick={handleRequestRecharge}>
+                <AlertDialogCancel onClick={() => setShow0PercentWarning(false)} className="font-mono">Close</AlertDialogCancel>
+                <AlertDialogAction onClick={handleRequestRecharge} className="font-mono">
                   Request Recharge
                 </AlertDialogAction>
               </AlertDialogFooter>
