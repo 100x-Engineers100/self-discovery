@@ -509,12 +509,12 @@ export default function ProjectIdeationPage() {
               {modules.map((moduleContext) => (
                 <Button
                   key={moduleContext.name}
-                  variant="default"
+                  variant="secondary"
                   onClick={() => setSelectedModule(moduleContext)}
-                  className="flex flex-col items-start p-4 h-auto text-left font-mono"
+                  className="cursor-pointer flex flex-col items-start p-4 h-auto text-left font-mono"
                 >
-                  <span className="text-lg font-semibold">{moduleContext.name}</span>
-                  <span className="text-sm text-muted-foreground mt-1">
+                  <span className="text-[#FF6445] text-lg font-semibold">{moduleContext.name}</span>
+                  <span className="text-sm text-foreground mt-1">
                     {moduleContext.description}
                   </span>
                 </Button>
