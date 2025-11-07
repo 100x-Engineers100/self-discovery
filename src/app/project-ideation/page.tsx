@@ -215,17 +215,19 @@ MANDATORY PRINCIPLES (must follow)
 OUTPUT STRUCTURE (required exact fields, in this order)
 For each proposal produce this exact block (use short sentences / bullet-like lines):
 
-Title: <<=6 words>
-Level: easy | medium
-Problem Statement: <1–2 sentences describing a specific user & real pain>
-Solution Summary: <1–2 sentences showing how the MVP solves it>
-Why this fits (rationale): <1–2 sentences mapping to Module Context learning outcome(s) (quote verbatim) and to Ikigai or Project Sample if applicable>
-Required skills: <3–6 short phrases (technical + soft)>
-Estimated effort: <solo estimate e.g., "10–20 hours">
-Key features: <3–6 comma-separated feature phrases>
-Acceptance criteria: <2 concise, measurable checks>
-Risks / Dependencies: <1 short line; mention paid APIs or datasets if needed OR "none" if none>
-Inspired by: <optional; format "Project Sample N: <title>" or "none">
+1) Title: <<=6 words>
+
+- Level: easy | medium
+
+- Problem Statement: <1–2 sentences describing a specific user & real pain>
+
+- Solution Summary: <1–2 sentences showing how the MVP solves it>
+
+- Why this fits (rationale): <1–2 sentences mapping to Module Context learning outcome(s) (quote verbatim) and to Ikigai or Project Sample if applicable>
+
+- Required skills: <3–6 short phrases (technical + soft)>
+
+- Key features: <3–6 comma-separated feature phrases>
 
 MANDATORY RULES FOR CONTENT QUALITY
 • Provide at least two proposals: one "easy" and one "medium". Optionally one alternate variant only if it adds distinct value.

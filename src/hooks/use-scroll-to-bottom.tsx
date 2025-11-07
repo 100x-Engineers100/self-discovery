@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import useSWR from "swr";
 
 type ScrollFlag = ScrollBehavior | false;
 
@@ -8,8 +7,7 @@ export function useScrollToBottom() {
   const endRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  const { data: scrollBehavior = false, mutate: setScrollBehavior } =
-    useSWR<ScrollFlag>("messages:should-scroll", null, { fallbackData: false });
+  const [scrollBehavior, setScrollBehavior] = useState<ScrollFlag>(false);
 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) {
@@ -17,8 +15,8 @@ export function useScrollToBottom() {
     }
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
-    // Check if we are within 100px of the bottom (like v0 does)
-    setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 100);
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 100;
+    setIsAtBottom(atBottom);
   }, []);
 
   useEffect(() => {
@@ -72,23 +70,20 @@ export function useScrollToBottom() {
     };
   }, [handleScroll]);
 
-  useEffect(() => {
-    if (scrollBehavior && containerRef.current) {
-      const container = containerRef.current;
-      const scrollOptions: ScrollToOptions = {
-        top: container.scrollHeight,
-        behavior: scrollBehavior,
-      };
-      container.scrollTo(scrollOptions);
-      setScrollBehavior(false);
-    }
-  }, [scrollBehavior, setScrollBehavior]);
-
   const scrollToBottom = useCallback(
     (currentScrollBehavior: ScrollBehavior = "smooth") => {
-      setScrollBehavior(currentScrollBehavior);
+      console.log("scrollToBottom called with behavior:", currentScrollBehavior);
+      if (containerRef.current) {
+        console.log("Directly scrolling containerRef.current:", containerRef.current);
+        containerRef.current.scrollTo({
+          top: containerRef.current.scrollHeight,
+          behavior: currentScrollBehavior,
+        });
+      } else {
+        console.log("containerRef.current is null when scrollToBottom is called.");
+      }
     },
-    [setScrollBehavior]
+    [containerRef]
   );
 
   function onViewportEnter() {
