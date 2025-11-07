@@ -30,6 +30,12 @@ interface ProjectSample {
   solution: string;
 }
 
+interface IkigaiResponseItem {
+  ikigai_details: IkigaiData | null;
+  chat_history: ChatMessage[];
+  chat_number: number;
+}
+
 const modules: ModuleContext[] = [
   {
     name: "Module 1: Diffusion Models",
@@ -332,8 +338,14 @@ export default function ProjectIdeationPage() {
           `${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai?userId=${session.user.id}`
         );
         if (response.ok) {
-          const data = await response.json();
-          setUserIkigaiData(data.ikigai_details);
+          const ikigaiResponses: IkigaiResponseItem[] = await response.json();
+          const completedIkigai = ikigaiResponses.filter((item: IkigaiResponseItem) => item.ikigai_details && item.ikigai_details.status === 'complete');
+          if (completedIkigai.length > 0) {
+            const latestIkigai = completedIkigai.sort((a: IkigaiResponseItem, b: IkigaiResponseItem) => b.chat_number - a.chat_number)[0];
+            setUserIkigaiData(latestIkigai.ikigai_details);
+          } else {
+            setUserIkigaiData(null);
+          }
         } else {
           console.error("Failed to fetch user Ikigai data");
           setUserIkigaiData(null); 

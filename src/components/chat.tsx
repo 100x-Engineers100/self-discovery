@@ -221,7 +221,6 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
       api: api,
       fetch: fetchWithErrorHandlers,
       prepareSendMessagesRequest(request) {
-        console.log("prepareSendMessagesRequest", request.messages);
         
         return {
           body: {
