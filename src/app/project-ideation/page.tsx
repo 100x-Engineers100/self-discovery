@@ -233,7 +233,6 @@ MANDATORY RULES FOR CONTENT QUALITY
 • Provide at least two proposals: one "easy" and one "medium". Optionally one alternate variant only if it adds distinct value.
 • For each proposal explicitly quote at least one Module Context learningOutcome or topicsCovered verbatim. Example: Covers: "Implement CRUD with REST".
 • If ikigaiData exists, add one line in "Why this fits" like: "Maps to Ikigai: uses '<what_you_love>' + '<what_you_are_good_at>'".
-• If derived from a Project Sample, include: "Inspired by: Project Sample N: <title>".
 • Each Problem Statement must specify who the user is (persona or target user), what they need, and why current alternatives fail at this scope.
 • Medium-level project must include at least one non-trivial integration or algorithmic component (e.g., recommendation rule, basic ML prototype, data ingestion).
 • Keep full reply proposing ideas <= 450 words. Use concise bullet-like lines; no long paragraphs.
