@@ -488,7 +488,7 @@ export default function IkigaiPage() {
                           },
                           {
                             type: "text",
-                            text: "Welcome to 100xEngineers! We’ll help you discover your Ikigai—where your passions, strengths, and career align. This process will guide you to find work that feels fulfilling and impactful. When you finish a task and feel truly satisfied, what kind of work is it? Examples: a) Building software and mentoring peers b) Designing intuitive interfaces c) Solving complex problems and sharing insights",
+                            text: "Welcome to 100xEngineers! We’ll help you discover your Ikigai—where your passions, strengths, and career align. This process will guide you to find work that feels fulfilling and impactful. When you finish a task and feel truly satisfied, what kind of work is it? Examples: a) Building software and mentoring peers b) Designing UI c) Solving complex problems and teaching others",
                             state: "done"
                           },
                         ],

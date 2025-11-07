@@ -50,7 +50,7 @@ Question text:
 "Ikigai begins with understanding what feels natural and fulfilling to you. When you finish doing something and feel satisfied or fulfilled, what kind of work is it? This helps identify the work that naturally excites and fulfills you."
 Examples:
  a) Building software and mentoring peers
- b) Designing intuitive interfaces
+ b) Designing UI
  c) Solving complex problems and sharing insights
 
 B) Second element (what you're good at)
