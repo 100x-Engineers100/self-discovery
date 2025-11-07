@@ -104,7 +104,7 @@ export function AppSidebar({ children, activePath, user, chatNumber }: AppSideba
         .sort((a: IkigaiApiResponse, b: IkigaiApiResponse) => b.chat_number - a.chat_number)[0] 
     : null;
 
-  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "completeddd";
+  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "complete";
 
   const handleNavigation = (e: React.MouseEvent, path: string) => {
     if (isIkigaiDataLoading) {
@@ -209,7 +209,7 @@ export function AppSidebar({ children, activePath, user, chatNumber }: AppSideba
                 {activePath === "/ikigai" && (
                   <div className="flex flex-col gap-2 pl-4">
                     <Button
-                      className="w-auto h-auto flex items-center gap-3 rounded-md p-1 font-semibold text-md bg-[#FF6445] text-white hover:bg-[#FF4B3A]"
+                      className="cursor-pointer w-auto h-auto flex items-center gap-3 rounded-md p-1 font-semibold text-md bg-[#FF6445] text-white hover:bg-[#FF4B3A]"
                       onClick={handleNewChat}
                     >
                       <PlusIcon size={16} /> New Chat

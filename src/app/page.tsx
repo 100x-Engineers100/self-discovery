@@ -10,6 +10,7 @@ import { ChevronDown } from "lucide-react";
 import useSWR from "swr";
 import { IkigaiApiResponse } from "@/lib/types";
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -28,7 +29,7 @@ export default function Home() {
         .sort((a: IkigaiApiResponse, b: IkigaiApiResponse) => b.chat_number - a.chat_number)[0] 
     : null;
 
-  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "completeddd";
+  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "complete";
 
   const handleNavigation = (e: React.MouseEvent, path: string) => {
     if (isIkigaiDataLoading) {
@@ -58,6 +59,31 @@ export default function Home() {
     });
     await signOut({ redirect: false });
     router.push("/login");
+  };
+
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      question: "How long does the Ikigai mapping take?",
+      answer: "The initial ikigai mapping conversation takes about 15-20 minutes. Our AI guide asks thoughtful questions at a comfortable pace, allowing you to reflect deeply on each response. You can always pause and return to continue your discovery.",
+    },
+    {
+      question: "Can I change my module selection later?",
+      answer: "Yes! Your journey is flexible. If you discover that another module aligns better with your ikigai, you can switch with guidance from the platform. Your progress and credits carry over, ensuring no learning is wasted.",
+    },
+    {
+      question: "Is this mandatory for the cohort?",
+      answer: "While not mandatory, it's highly recommended. Students who complete the self-discovery process report 3x higher satisfaction and significantly better project outcomes. It's an investment in making your learning journey more meaningful.",
+    },
+    {
+      question: "How is this different from career counseling?",
+      answer: "Unlike traditional career counseling, our tool focuses on the intersection of purpose and practical application. It's not just about finding what you want to do, but immediately connecting it to actionable projects and personalized learning paths within the cohort.",
+    },
+  ];
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
   };
 
   return (
@@ -123,10 +149,10 @@ export default function Home() {
         <div className=" px-4 md:px-6 text-center relative z-10">
           <div className="flex flex-col items-center space-y-4">
             <h1 className="text-4xl tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none font-sans">
-              Find Your <span className="text-orange-500">Ikigai</span>.
+              Find Your <span className="text-orange-500">Ikigai</span>
             </h1>
             <h1 className="text-4xl tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none font-sans">
-              Shape Your Journey.
+              Shape Your Journey
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-700 md:text-xl font-mono">
               A guided space to understand yourself, refine your ideas, and build your path through the cohort.
@@ -236,26 +262,26 @@ export default function Home() {
             </div>
           </div>
           <div className="mx-auto w-full max-w-3xl mt-12 space-y-4">
-            {/* FAQ Item 1 */}
-            <div className="rounded-xl border bg-white p-6 shadow-sm flex justify-between items-center">
-              <h3 className="font-serif text-lg">How long does the Ikigai mapping take?</h3>
-              <ChevronDown className="h-5 w-5" />
-            </div>
-            {/* FAQ Item 2 */}
-            <div className="rounded-xl border bg-white p-6 shadow-sm flex justify-between items-center">
-              <h3 className="font-serif text-lg">Can I change my module selection later?</h3>
-              <ChevronDown className="h-5 w-5" />
-            </div>
-            {/* FAQ Item 3 */}
-            <div className="rounded-xl border bg-white p-6 shadow-sm flex justify-between items-center">
-              <h3 className="font-serif text-lg">Is this mandatory for the cohort?</h3>
-              <ChevronDown className="h-5 w-5" />
-            </div>
-            {/* FAQ Item 4 */}
-            <div className="rounded-xl border bg-white p-6 shadow-sm flex justify-between items-center">
-              <h3 className="font-serif text-lg">How is this different from career counseling?</h3>
-              <ChevronDown className="h-5 w-5" />
-            </div>
+            {faqItems.map((item, index) => (
+              <div key={index} className="rounded-xl border bg-white shadow-sm">
+                <button
+                  className="flex justify-between items-center w-full p-6 focus:outline-none"
+                  onClick={() => toggleFaq(index)}
+                >
+                  <h3 className="font-serif text-lg text-left">{item.question}</h3>
+                  <ChevronDown
+                    className={`h-5 w-5 transition-transform duration-300 ${
+                      openFaq === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {openFaq === index && (
+                  <div className="px-6 pb-6 pt-0">
+                    <p className="text-sm text-gray-700 font-mono">{item.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
