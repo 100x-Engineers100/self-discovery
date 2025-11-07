@@ -39,7 +39,8 @@ export default function Home() {
     
     if (!isIkigaiComplete && (path === "/project-ideation" || path === "/cohort-roadmap")) {
       e.preventDefault();
-      toast.error("Please complete your Ikigai chart first to access this page.");
+      // toast.error("Please complete your Ikigai chart first to access this page.");
+      toast.error("Coming soon!");
       return;
     }
   };

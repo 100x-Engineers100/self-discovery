@@ -116,7 +116,8 @@ export function AppSidebar({ children, activePath, user, chatNumber }: AppSideba
     
     if (!isIkigaiComplete && (path === "/project-ideation" || path === "/cohort-roadmap")) {
       e.preventDefault();
-      toast.error("Please complete your Ikigai chart first to access this page.");
+      // toast.error("Please complete your Ikigai chart first to access this page.");
+      toast.error("Coming soon!");
       setOpenMobile(false);
       return;
     }
