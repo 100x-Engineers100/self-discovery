@@ -29,7 +29,7 @@ export default function Home() {
         .sort((a: IkigaiApiResponse, b: IkigaiApiResponse) => b.chat_number - a.chat_number)[0] 
     : null;
 
-  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "complete";
+  const isIkigaiComplete = latestIkigaiData?.ikigai_details?.status === "completeddd";
 
   const handleNavigation = (e: React.MouseEvent, path: string) => {
     if (isIkigaiDataLoading) {
