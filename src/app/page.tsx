@@ -90,30 +90,30 @@ export default function Home() {
     <div className="flex w-full flex-col">
       {/* Header */}
       <header className="fixed top-0 z-40 w-full border-b bg-background">
-        <div className="mx-4 flex h-16 items-center justify-between space-x-4">
-          <div className="flex gap-6 md:gap-10">
+        <div className="md:mx-4 mx-2 flex h-16 items-center justify-between md:space-x-4 space-x-2">
+          <div className="flex md:gap-6 gap-2 md:gap-10">
             <Link href="/" className="flex items-center space-x-2">
               <Image src="/100xEngineers-black.svg" alt="100xEngineers Logo" width={150} height={30} />
             </Link>
           </div>
           <div>
-              <nav className="flex justify-center gap-6 bg-gray-100 px-4 py-2 rounded-md">
+            <nav className="flex justify-center md:gap-6 gap-5 bg-gray-100 md:px-4 md:py-2 p-2 rounded-md">
               <Link
                 href="/ikigai"
-                className="flex items-center text-base font-mono text-black"
+                className="flex items-center md:text-base text-xs font-mono text-black"
               >
                 Ikigai
               </Link>
               <Link
                 href="/project-ideation"
-                className="flex items-center text-base font-mono text-black"
+                className="flex items-center md:text-base text-xs font-mono text-black"
                 onClick={(e) => handleNavigation(e, "/project-ideation")}
               >
                 Project Ideation
               </Link>
               <Link
                 href="/cohort-roadmap"
-                className="flex items-center text-base font-mono text-black"
+                className="flex items-center md:text-base text-xs font-mono text-black"
                 onClick={(e) => handleNavigation(e, "/cohort-roadmap")}
               >
                 Cohort Roadmap
@@ -123,11 +123,11 @@ export default function Home() {
           <div className="flex items-center justify-end space-x-4">
             <nav className="flex items-center space-x-1">
               {session?.user ? (
-                <Button variant="default" size="sm" asChild onClick={handleLogout}>
-                  <Link href="#">Logout</Link>
+                <Button variant="default" asChild className="md:px-4 md:py-2 px-2 py-0 md:h-10 h-8" onClick={handleLogout}>
+                  <Link className="md:text-base text-xs text-black" href="#">Logout</Link>
                 </Button>
               ) : (
-                <Button variant="default" size="sm" asChild className="bg-orange-500 text-white hover:bg-orange-600">
+                <Button variant="default" asChild className="bg-orange-500 text-white hover:bg-orange-600">
                   <Link href="/login">Start Journey</Link>
                 </Button>
               )}
@@ -137,7 +137,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-white text-black overflow-hidden">
+      <section className="relative w-full py-20 pb-0 md:py-24 lg:py-32 xl:py-48 bg-white text-black overflow-hidden">
         <Image
           src="/ikigai-home.png"
           alt="Cherry Blossom Background"

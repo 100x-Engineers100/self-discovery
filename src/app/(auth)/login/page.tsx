@@ -48,8 +48,8 @@ export default function LoginPage() {
   }, [state, router, updateSession]);
 
   return (
-    <div className="relative flex h-dvh w-screen items-center justify-end bg-white">
-      <div className="h-full w-full">
+    <div className="relative flex h-dvh w-screen items-center md:justify-end justify-center bg-white">
+      <div className="h-full w-full absolute top-0 left-0">
         <Image
           src="/ikigai-login.png"
           alt="Login Background"
@@ -58,13 +58,13 @@ export default function LoginPage() {
           quality={100}
         />
       </div>
-      <div className="relative z-10 flex w-full max-w-md flex-col gap-12 overflow-hidden rounded-2xl bg-white p-8 shadow-lg md:max-w-lg lg:max-w-xl mr-20">
+      <div className="relative z-10 flex w-full max-w-xs flex-col gap-12 overflow-hidden rounded-2xl bg-white p-8 shadow-lg md:max-w-lg lg:max-w-xl md:mr-20">
         <div className="flex flex-col items-center justify-center gap-4 px-4 text-center sm:px-16">
           <img src="/100xEngineers-black.svg" alt="100xEngineers" className="h-6 w-auto" />
         </div>
-        <h2 className="text-center text-4xl tracking-tight">Welcome, cohort member 👋</h2>
+        <h2 className="text-center lg:text-4xl md:text-2xl text-xl tracking-tight">Welcome, cohort member 👋</h2>
         <div className="flex flex-col gap-2 text-center">
-          <h3 className="text-2xl tracking-tight">Sign in to continue</h3>
+          <h3 className="lg:text-2xl md:text-xl tracking-tight">Sign in to continue</h3>
           <p className="text-sm text-gray-500 dark:text-zinc-400">
             Use the email you registered for the cohort with.
           </p>
