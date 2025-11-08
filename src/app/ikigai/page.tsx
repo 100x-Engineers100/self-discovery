@@ -416,30 +416,29 @@ export default function IkigaiPage() {
   return (
     <SidebarProvider>
       <AppSidebar user={session?.user} activePath="/ikigai" chatNumber={currentChatNumber}>
-        <div className="flex flex-col w-full h-screen p-4 overflow-hidden">
-          <div className="flex items-center justify-between gap-3 pb-4">
-            <div className="flex items-center gap-2">
-              <div className="text-2xl font-bold font-mono">Ikigai</div>
+        <div className="flex flex-col w-full h-screen md:p-4 p-2 overflow-hidden">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center md:gap-2 gap-1">
+              <div className="md:text-2xl text-xl font-bold font-mono">Ikigai</div>
               <div className="text-sm text-gray-400 flex items-center gap-2">
                 {ikigaiFilled && (
                   <Button
                     onClick={handleDownloadPdf}
-                    className="ml-2 p-2 bg-[#FF6445] text-white rounded-md hover:bg-[#FF4B3A]"
+                    className="ml-2 p-2 md:h-9 h-7 bg-[#FF6445] md:text-base text-xs text-white rounded-md hover:bg-[#FF4B3A]"
                     size="sm"
                   >
-                    Download PDF
+                    Download
                   </Button>
                 )}
               </div>
             </div>
 
             <div className="flex justify-end items-center gap-2">
-              <div className="bg-gray-100 p-2 text-black rounded-md font-mono">
-                Credits: <span className="text-orange-500 font-semibold">{(ikigaiBalance / 1000).toFixed(0)}</span>
+              <div className="bg-gray-100 md:p-2 p-1 text-xs md:text-base text-black rounded-md font-mono">
+                Credits: <span className="text-orange-500 text-sm md:text-base font-semibold">{(ikigaiBalance / 1000).toFixed(0)}</span>
               </div>
               {ikigaiBalance <= 0 && (
                 <Button
-                  size="sm"
                   style={{backgroundColor:"#FF6445"}}
                   onClick={async () => {
                     setIsRecharging(true);
@@ -451,10 +450,10 @@ export default function IkigaiPage() {
                       setIsRecharging(false);
                     }
                   }}
-                  className="bg-orange-500 text-white cursor-pointer hover:bg-orange-600 p-2 rounded-md h-auto"
+                  className="bg-orange-500 text-white cursor-pointer hover:bg-orange-600 p-2 rounded-md h-auto md:h-9 h-7 md:text-base text-xs"
                   disabled={isRecharging}
                 >
-                  {isRecharging ? "Requesting..." : "Request Recharge"}
+                  {isRecharging ? "Requesting..." : "Recharge"}
                 </Button>
               )}
             </div>

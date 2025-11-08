@@ -581,11 +581,12 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
   return (
     <DataStreamProvider>
       <div className="overscroll-behavior-contain flex h-[95dvh] min-w-0 touch-pan-y flex-col bg-background">
-        {/* <ChatHeader
+        <ChatHeader
           chatId={id}
           selectedVisibilityType={initialVisibilityType}
           isReadonly={isReadonly}
-        /> */}
+          remainingCredits={remainingCredits}
+        />
         {/* <div className="overflow-y-auto" ref={messagesEndRef}> */}
           <Messages
             chatId={id}
@@ -601,7 +602,7 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
           />
         {/* </div> */}
 
-        <div className="sticky z-1 mx-auto flex w-full gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4" style={{bottom: isIkigaiChat ? "0" : "-20px", marginBottom: isIkigaiChat ? "30px" : "0"}}>
+        <div className={`sticky z-1 mx-auto flex w-full gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4 ${isIkigaiChat ? 'bottom-0 mb-0 md:mb-[15px]' : 'bottom-[-20px]'}`}>
           {!isReadonly && (
             <MultimodalInput
               attachments={attachments}

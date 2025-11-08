@@ -27,8 +27,8 @@ function PureChatHeader({
   const { width: windowWidth } = useWindowSize();
 
   return (
-    <header className="sticky top-0 flex items-center gap-2 bg-background px-2 py-1.5 md:px-2">
-      {/* <SidebarToggle /> */}
+    <header className="sticky top-0 flex items-center gap-2 bg-background py-2">
+      <SidebarToggle />
 
       {/* {(!open || windowWidth < 768) && (
         <Button
@@ -45,7 +45,7 @@ function PureChatHeader({
       )} */}
 
       <div className="ml-auto flex items-center gap-2">
-        <span className="text-sm text-gray-500">Credits: {remainingCredits.toFixed(2)}</span>
+        {/* <span className="text-sm text-gray-500">Credits: {remainingCredits.toFixed(2)}</span> */}
         {/* {!isReadonly && (
           <VisibilitySelector
             chatId={chatId}
