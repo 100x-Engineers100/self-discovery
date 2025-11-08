@@ -76,10 +76,6 @@ export async function POST(req: NextRequest) {
 
     const usage = await result.usage;
     if (usage) {
-      console.log("Token Usage:");
-      console.log(`  Input Tokens: ${usage.inputTokens}`);
-      console.log(`  Output Tokens: ${usage.outputTokens}`);
-      console.log(`  Total Tokens: ${usage.totalTokens}`);
       const newBalance = currentIkigaiBalance - (usage?.totalTokens || 0);
       await updateIkigaiBalance(userId, newBalance);
     }

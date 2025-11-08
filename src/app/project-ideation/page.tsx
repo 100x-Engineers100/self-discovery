@@ -415,8 +415,6 @@ export default function ProjectIdeationPage() {
   const [projectIdeaId, setProjectIdeaId] = useState<string | null>(null);
 
   const handleChatFinish = async (text: string, messages: ChatMessage[]) => {
-    console.log("1");
-    
     fetchIdeationBalance(selectedModule?.name || '');
     setProjectIdeationFilled(true);
     setChatHistory(messages);
@@ -428,9 +426,6 @@ export default function ProjectIdeationPage() {
           role: msg.role,
           parts: Array.isArray(msg.parts) ? msg.parts : [{ type: 'text', text: '' }] // Adjust based on actual message structure
         }));
-
-        console.log("userName", session.user.name);
-        
 
       await fetch(`${process.env.NEXT_PUBLIC_SELF_DISCOVERY_API_BASE_URL}/api/project-ideation`, {
         method: 'PUT',

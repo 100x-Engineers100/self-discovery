@@ -310,8 +310,6 @@ const [currentInteractionTokens, setCurrentInteractionTokens] = useState<AppUsag
 
               setChatHistory(chatHistory);
 
-              console.log("chat_number", currentChatNumber);
-
               fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
                 method: 'POST',
                 headers: {

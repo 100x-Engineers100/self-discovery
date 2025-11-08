@@ -72,16 +72,12 @@ export function useScrollToBottom() {
 
   const scrollToBottom = useCallback(
     (currentScrollBehavior: ScrollBehavior = "smooth") => {
-      console.log("scrollToBottom called with behavior:", currentScrollBehavior);
       if (containerRef.current) {
-        console.log("Directly scrolling containerRef.current:", containerRef.current);
         containerRef.current.scrollTo({
           top: containerRef.current.scrollHeight,
           behavior: currentScrollBehavior,
         });
-      } else {
-        console.log("containerRef.current is null when scrollToBottom is called.");
-      }
+      } 
     },
     [containerRef]
   );

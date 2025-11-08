@@ -109,18 +109,16 @@ Question text:
 "What do you feel you’re exceptionally good at, and others seek your help with? Consider the skills and strengths that people turn to you for, whether they are technical, creative, or interpersonal."
 
 Examples:
-- (assistant-generated, persona-tailored after A)
+- (assistant-generated, persona-tailored)
 
 C) Third element (what the world needs)
 Question text:
 "When you think about the world’s biggest challenges, which ones inspire you the most? Reflect on the problems that motivate you to use your skills to create solutions."
 
-Examples:
-- (assistant-generated, persona-tailored after A)
+Examples:\n\n- (assistant-generated, persona-tailored)
 
 D) Fourth element (what you can be paid for)
 Question text:
 "How do you envision your ideal role or career, both personally and professionally? This is where you reflect on your long-term goals and what you see yourself doing in a role that fulfills you."
 
-Examples:
-- (assistant-generated, persona-tailored after A)`;
+Examples:\n\n- (assistant-generated, persona-tailored)`;
