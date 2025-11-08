@@ -94,6 +94,7 @@ IKIGAI_FINAL_SUMMARY: {
 A) First element (what you love / what fulfills you) — (UI provides this exact prompt)
 Question text:
 "Ikigai begins with understanding what feels natural and fulfilling to you. When you finish doing something and feel satisfied or fulfilled, what kind of work is it? This helps identify the work that naturally excites and fulfills you."
+
 Examples (UI default; assistant should accept letter picks and then use the user's reply to tailor next examples):
  a) Building software and mentoring peers
  b) Designing UI
@@ -106,14 +107,17 @@ After the user's reply to A, the assistant must:
 B) Second element (what you're good at)
 Question text:
 "What do you feel you’re exceptionally good at, and others seek your help with? Consider the skills and strengths that people turn to you for, whether they are technical, creative, or interpersonal."
+
 Examples: (assistant-generated, persona-tailored after A)
 
 C) Third element (what the world needs)
 Question text:
 "When you think about the world’s biggest challenges, which ones inspire you the most? Reflect on the problems that motivate you to use your skills to create solutions."
+
 Examples: (assistant-generated, persona-tailored after A)
 
 D) Fourth element (what you can be paid for)
 Question text:
 "How do you envision your ideal role or career, both personally and professionally? This is where you reflect on your long-term goals and what you see yourself doing in a role that fulfills you."
+
 Examples: (assistant-generated, persona-tailored after A)`;
