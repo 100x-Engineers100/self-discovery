@@ -20,6 +20,7 @@ import Spinner  from "@/components/ui/spinner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas-pro';
+import { SidebarToggle } from "@/components/sidebar-toggle";
 
 async function saveIkigaiAnswers(userId: string, chat_number: number, ikigaiDetails: IkigaiData, chatHistory: ChatMessage[]) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_PROFILE_SYSTEM_API_BASE_URL}/api/ikigai`, {
@@ -417,14 +418,15 @@ export default function IkigaiPage() {
     <SidebarProvider>
       <AppSidebar user={session?.user} activePath="/ikigai" chatNumber={currentChatNumber}>
         <div className="flex flex-col w-full h-screen md:p-4 p-2 overflow-hidden">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center md:gap-2 gap-1">
+              <SidebarToggle/>
               <div className="md:text-2xl text-xl font-bold font-mono">Ikigai</div>
               <div className="text-sm text-gray-400 flex items-center gap-2">
                 {ikigaiFilled && (
                   <Button
                     onClick={handleDownloadPdf}
-                    className="ml-2 p-2 md:h-9 h-7 bg-[#FF6445] md:text-base text-xs text-white rounded-md hover:bg-[#FF4B3A]"
+                    className="p-2 md:h-9 h-7 bg-[#FF6445] md:text-base text-xs text-white rounded-md hover:bg-[#FF4B3A]"
                     size="sm"
                   >
                     Download

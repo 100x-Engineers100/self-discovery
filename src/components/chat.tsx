@@ -580,13 +580,13 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
 
   return (
     <DataStreamProvider>
-      <div className="overscroll-behavior-contain flex h-[95dvh] min-w-0 touch-pan-y flex-col bg-background">
-        <ChatHeader
+      <div className="overscroll-behavior-contain flex h-[95dvh] min-w-0 touch-pan-y flex-col bg-background py-2">
+        {/* <ChatHeader
           chatId={id}
           selectedVisibilityType={initialVisibilityType}
           isReadonly={isReadonly}
           remainingCredits={remainingCredits}
-        />
+        /> */}
         {/* <div className="overflow-y-auto" ref={messagesEndRef}> */}
           <Messages
             chatId={id}

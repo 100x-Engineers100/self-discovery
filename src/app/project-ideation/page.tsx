@@ -15,6 +15,7 @@ import { toast } from "@/components/toast";
 import { Toaster } from "sonner";
 import { ChatMessage } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { SidebarToggle } from "@/components/sidebar-toggle";
 
 interface ModuleContext {
   name: string;
@@ -528,45 +529,15 @@ export default function ProjectIdeationPage() {
       <AppSidebar user={session?.user} activePath="/project-ideation">
         <div className="flex flex-col w-full h-screen p-4 overflow-hidden">
           <Head>
-            <title className="font-mono">Project Ideation</title>
+            <title className="font-mono">Ideation</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
-          <h1 className="text-2xl font-bold mb-4 font-mono">Project Ideation</h1>
-
-          {!selectedModule ? (
-            <>
-            <h2 className="text-xl font-bold tracking-tight font-mono">Select a module to ideate your project</h2>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              {modules.map((moduleContext) => (
-                <Button
-                  key={moduleContext.name}
-                  variant="secondary"
-                  onClick={() => setSelectedModule(moduleContext)}
-                  className="cursor-pointer flex flex-col items-start p-4 h-auto text-left font-mono"
-                >
-                  <span className="text-[#FF6445] text-lg font-semibold">{moduleContext.name}</span>
-                  <span className="text-sm text-foreground mt-1">
-                    {moduleContext.description}
-                  </span>
-                </Button>
-              ))}
-            </div>
-            </>
-          ) : (
-            <div className="w-full">
-              <div className="flex justify-between items-center gap-4 pb-3">
-                <div className="flex items-center gap-6"> 
-                  <h2 className="text-xl font-bold font-mono">{selectedModule.name}</h2>
-                  <button
-                    className="px-2 py-1 bg-[#FF6445] text-md cursor-pointer text-white rounded hover:bg-[#d44a2f] font-mono"
-                    onClick={() => setSelectedModule(null)}
-                  >
-                    Change Module
-                  </button>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-gray-100 p-2 rounded-md font-mono">
+          <div className="flex items-center mb-4 gap-4 border-b border-black pb-4">
+            <SidebarToggle/>
+            <h1 className="text-lg md:text-2xl font-bold font-mono">Ideation</h1>
+            <div className="w-full flex items-center justify-end gap-2">
+                  <div className="text-sm md:text-base bg-gray-100 px-1 py-2 md:p-2 rounded-md font-mono">
                     Credits: <span className="text-orange-500 font-semibold">{(ideationBalance / 1000).toFixed(0)}</span>
                   </div>
                   {ideationBalance <= 0 && (
@@ -586,9 +557,41 @@ export default function ProjectIdeationPage() {
                       className="bg-[#FF6445] text-white cursor-pointer hover:bg-[#d44a2f] p-2 rounded-md h-auto font-mono"
                       disabled={isRecharging}
                     >
-                      {isRecharging ? "Requesting..." : "Request Recharge"}
+                      {isRecharging ? "Requesting..." : "Recharge"}
                     </Button>
                   )}
+                </div>
+          </div>
+
+          {!selectedModule ? (
+            <>
+            <h2 className="text-md md:text-xl font-semibold tracking-tight font-mono">Select a module to ideate your project</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {modules.map((moduleContext) => (
+                <div
+                  key={moduleContext.name}
+                  onClick={() => setSelectedModule(moduleContext)}
+                  className="cursor-pointer bg-secondary rounded-lg break-words flex flex-col items-start p-3 h-auto text-left font-mono w-full"
+                >
+                  <span className="text-[#FF6445] text-md md:text-lg font-semibold">{moduleContext.name}</span>
+                  <span className="text-xs md:text-sm text-foreground mt-1 break-words">
+                    {moduleContext.description}
+                  </span>
+                </div>
+              ))}
+            </div>
+            </>
+          ) : (
+            <div className="w-full">
+              <div className="flex flex-col md:flex-row md:justify-between justify-start items-center gap-4">
+                <div className="flex items-center md:gap-6 gap-4"> 
+                  <h2 className="text-md md:text-xl font-semibold font-mono">{selectedModule.name}</h2>
+                  <button
+                    className="px-2 py-1 h-12 bg-[#FF6445] text-sm md:text-md cursor-pointer text-white rounded hover:bg-[#d44a2f] font-mono"
+                    onClick={() => setSelectedModule(null)}
+                  >
+                    Change Module
+                  </button>
                 </div>
               </div>
               <DataStreamProvider>
