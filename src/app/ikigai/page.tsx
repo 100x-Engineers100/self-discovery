@@ -150,9 +150,9 @@ export default function IkigaiPage() {
     });
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
-      orientation: "portrait",
+      orientation: "landscape",
       unit: "pt",
-      format: "a4",
+      format: "a0"
     });
 
     const imgProps = pdf.getImageProperties(imgData);

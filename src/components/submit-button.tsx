@@ -19,7 +19,7 @@ export function SubmitButton({
   return (
     <Button
       aria-disabled={pending || isSuccessful}
-      className="relative w-full bg-gradient-to-r from-[#FF6445] to-[#FF4B3A] text-white rounded-md py-2 px-4 font-semibold hover:from-[#FF4B3A] hover:to-[#FF6445]"
+      className="cursor-pointer relative w-full bg-gradient-to-r from-[#FF6445] to-[#FF4B3A] text-white rounded-md py-2 px-4 font-semibold hover:from-[#FF4B3A] hover:to-[#FF6445]"
       disabled={pending || isSuccessful}
       type={pending ? "button" : "submit"}
     >

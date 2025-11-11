@@ -29,6 +29,7 @@ interface ProjectSample {
   title: string;
   problemStatement: string;
   solution: string;
+  moduleId: string;
 }
 
 interface IkigaiResponseItem {
@@ -182,7 +183,7 @@ interface IkigaiData {
   explanation: string;
 }
 
-const generateSystemPrompt = (ikigaiData: IkigaiData | null, moduleContext: ModuleContext, samples: ProjectSample[]): string => {  
+const generateSystemPrompt = (ikigaiData: IkigaiData | null, moduleContext: ModuleContext, allSamples: ProjectSample[]): string => {  
   let ikigaiPrompt = "";
   if (ikigaiData && ikigaiData.status === 'complete') {
     ikigaiPrompt = `Mentee\'s Ikigai Data:\n  - What they love: ${ikigaiData.what_you_love}\n  - What they are good at: ${ikigaiData.what_you_are_good_at}\n  - What the world needs: ${ikigaiData.what_world_needs}\n  - What they can be paid for: ${ikigaiData.what_you_can_be_paid_for}`;
@@ -190,6 +191,8 @@ const generateSystemPrompt = (ikigaiData: IkigaiData | null, moduleContext: Modu
   }
 
   const modulePrompt = `Module Context:\n  - Module Name: ${moduleContext.name}\n  - Description: ${moduleContext.description}\n  - Learning Outcomes: ${moduleContext.learningOutcomes.join(", ")}\n  - Topics Covered: ${moduleContext.topicsCovered.join(", ")}`;
+
+  const samples = allSamples.filter(sample => sample.moduleId === moduleContext.name);
 
   const samplesPrompt = samples.map((sample, index) => `Project Sample ${index + 1}:\n  - Title: ${sample.title}\n  - Problem Statement: ${sample.problemStatement}\n  - Solution: ${sample.solution}`).join("\n\n");
 
@@ -288,11 +291,25 @@ const projectSamples: ProjectSample[] = [
     title: "AI-Powered Study Buddy",
     problemStatement: "Students struggle with personalized learning experiences and efficient study techniques. They often get stuck on concepts, lack motivation, and find it hard to track their progress effectively.",
     solution: "Develop an AI-powered study buddy application that provides personalized learning paths, intelligent Q&A, progress tracking, and motivational support. The AI can adapt to the student\'s learning style, identify areas of weakness, and suggest relevant resources.",
+    moduleId: "Module 3: Large Language Models",
   },
   {
     title: "Smart Home Energy Optimizer",
     problemStatement: "Homeowners face challenges in managing their energy consumption efficiently, leading to high utility bills and environmental impact. Existing smart home systems often lack comprehensive optimization capabilities.",
     solution: "Create a smart home energy optimization system that uses machine learning to analyze energy usage patterns, predict future consumption, and automatically adjust smart devices (thermostats, lights, appliances) to minimize energy waste while maintaining comfort. It could also provide users with detailed insights and recommendations.",
+    moduleId: "Module 2: Full Stack Development",
+  },
+  {
+    title: "AI Art Generator with Style Transfer",
+    problemStatement: "Artists and designers often find it challenging to experiment with diverse artistic styles and generate unique visual content quickly. Existing tools may lack advanced customization and real-time style transfer capabilities.",
+    solution: "Develop an AI art generator that leverages diffusion models for image creation and incorporates advanced style transfer techniques. Users can upload their own images or sketches, apply various artistic styles (e.g., impressionistic, cubist, abstract), and generate high-quality, unique artworks. The platform should offer intuitive controls for style intensity, content preservation, and real-time preview.",
+    moduleId: "Module 1: Diffusion Models",
+  },
+  {
+    title: "Autonomous Customer Support Agent",
+    problemStatement: "Businesses struggle with providing 24/7 customer support and handling a high volume of routine inquiries efficiently. Human agents can get overwhelmed, leading to slower response times and reduced customer satisfaction.",
+    solution: "Implement an autonomous AI customer support agent that can handle common customer queries, provide instant solutions, and escalate complex issues to human agents when necessary. The agent should be capable of natural language understanding, personalized responses based on customer history, and integration with existing CRM systems. It should continuously learn from interactions to improve its performance over time.",
+    moduleId: "Module 4: AI Agents",
   },
 ];
 

@@ -49,6 +49,7 @@ export function AuthForm({
           placeholder="Enter your Password"
           required
           type="password"
+          maxLength={30}
         />
       </div>
 
