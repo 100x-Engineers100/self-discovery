@@ -336,7 +336,8 @@ export default function IkigaiPage() {
       }
     };
     fetchIkigaiStatus();
-  }, [session, router, searchParams]); 
+  }, [router, searchParams]); 
+  // }, []); 
 
   useEffect(() => {
     fetchIkigaiBalance();
@@ -498,7 +499,7 @@ export default function IkigaiPage() {
                     initialChatModel={selectedModelId}
                     initialVisibilityType="private"
                     isReadonly={false}
-                    autoResume={false}
+                    autoResume={true}
                     isIkigaiChat={true}
                     saveIkigaiAnswers={saveIkigaiAnswers}
                     onChatFinish={handleChatFinish}

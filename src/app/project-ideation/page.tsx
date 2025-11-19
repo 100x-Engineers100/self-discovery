@@ -502,7 +502,7 @@ export default function ProjectIdeationPage() {
       };
       fetchAllUserData();
     }
-  }, [session, status, router, selectedModule]);
+  }, [status, router, selectedModule]);
 
   useEffect(() => {
     const fiftyPercent = MAX_TOKENS_PER_MENTEE * 0.5;
