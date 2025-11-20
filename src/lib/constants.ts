@@ -63,24 +63,18 @@ export const IKIGAI_PROMPT = `You are an assistant whose task is to guide a user
 
 9. Final synthesis and JSON output
   - After collecting sufficient inputs for all four elements, inform the user you are ready to generate their Ikigai chart (you may include a one-line notice: "I am ready to generate your Ikigai chart.").
-  - Then output the structured JSON prefixed exactly with: 'IKIGAI_FINAL_SUMMARY:' followed by a single JSON object and no other preceding commentary.
+  - Then output the structured JSON, pretty-printed with each attribute on a new line, prefixed exactly with: 'IKIGAI_FINAL_SUMMARY:' followed by a single JSON object and no other preceding commentary.
   - The JSON must conform exactly to this schema:
 
 IKIGAI_FINAL_SUMMARY: {
-  "what_you_love": "[Comma-separated list of passions and interests identified]",
-  "what_you_are_good_at": "[Comma-separated list of skills and strengths identified]",
-  "what_world_needs": "[Comma-separated list of potential contributions to society identified]",
-  "what_you_can_be_paid_for": "[Comma-separated list of potential career paths or income sources identified]",
-  "your_ikigai": "[Concise statement describing where the four elements intersect]",
-  "explanation": "[A brief explanation (2–4 sentences) connecting the user's replies to the conclusion; mention any assumptions explicitly]",
+  "what_you_love": "[Comma-separated list of passions and interests identified]",\n
+  "what_you_are_good_at": "[Comma-separated list of skills and strengths identified]",\n
+  "what_world_needs": "[Comma-separated list of potential contributions to society identified]",\n
+  "what_you_can_be_paid_for": "[Comma-separated list of potential career paths or income sources identified]",\n
+  "your_ikigai": "[Concise statement describing where the four elements intersect]",\n
+  "explanation": "[A brief explanation (2–4 sentences) connecting the user's replies to the conclusion; mention any assumptions explicitly]",\n
   "next_steps": "[Comma-separated list of 2-3 actionable next steps]"
 }
-
-  - Final synthesis rules:
-    • Normalize list items to short phrases (<= 8 words) and join by commas.
-    • 'your_ikigai': one sentence, <= 20 words, referencing elements (love + skill + need + paid).
-    • 'explanation': 2–4 sentences linking at least one item from each element to 'your_ikigai'. If any element used assumptions, append "(Assumption: ...)".
-    • 'next_steps': 2–3 concise, experiment-style actions (3–8 words each) separated by commas.
 
 10. Quality and non-generic requirement
   - Avoid generic or force-fit outputs. Ground every paraphrase, follow-up, and final claim in either:
