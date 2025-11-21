@@ -102,7 +102,18 @@ function parseIkigaiResponse(text: string): IkigaiData | null {
       typeof parsedData.what_you_can_be_paid_for === 'string' &&
       typeof parsedData.your_ikigai === 'string' &&
       typeof parsedData.explanation === 'string' &&
-      typeof parsedData.next_steps === 'string'
+      typeof parsedData.status === 'string' &&
+      typeof parsedData.next_steps === 'string' &&
+      (parsedData.strength_map === undefined || (
+        Array.isArray(parsedData.strength_map.core_strengths) &&
+        Array.isArray(parsedData.strength_map.supporting_skills) &&
+        typeof parsedData.strength_map.proof === 'string'
+      )) &&
+      (parsedData.weakness_map === undefined || (
+        Array.isArray(parsedData.weakness_map.skill_gaps) &&
+        Array.isArray(parsedData.weakness_map.risks) &&
+        Array.isArray(parsedData.weakness_map.blocks)
+      ))
     ) {
       return parsedData as IkigaiData;
     }

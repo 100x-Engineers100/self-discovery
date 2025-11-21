@@ -13,7 +13,7 @@ import Spinner from "@/components/ui/spinner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/toast";
 import { Toaster } from "sonner";
-import { ChatMessage } from "@/lib/types";
+import { ChatMessage, IkigaiData } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { SidebarToggle } from "@/components/sidebar-toggle";
 
@@ -173,21 +173,13 @@ const modules: ModuleContext[] = [
   },
 ];
 
-interface IkigaiData {
-  what_you_love: string;
-  what_you_are_good_at: string;
-  what_world_needs: string;
-  what_you_can_be_paid_for: string;
-  status: string;
-  your_ikigai: string;
-  explanation: string;
-}
+
 
 const generateSystemPrompt = (ikigaiData: IkigaiData | null, moduleContext: ModuleContext, allSamples: ProjectSample[]): string => {  
   let ikigaiPrompt = "";
   if (ikigaiData && ikigaiData.status === 'complete') {
     ikigaiPrompt = `Mentee\'s Ikigai Data:\n  - What they love: ${ikigaiData.what_you_love}\n  - What they are good at: ${ikigaiData.what_you_are_good_at}\n  - What the world needs: ${ikigaiData.what_world_needs}\n  - What they can be paid for: ${ikigaiData.what_you_can_be_paid_for}`;
-    ikigaiPrompt += `\n  - Your Ikigai: ${ikigaiData.your_ikigai}\n  - Explanation: ${ikigaiData.explanation}`;
+    ikigaiPrompt += `\n  - Your Ikigai: ${ikigaiData.your_ikigai}\n  - Explanation: ${ikigaiData.explanation} \n - Core Strengths: ${ikigaiData.strength_map?.core_strengths.join(", ")} \n - Supporting Skills: ${ikigaiData.strength_map?.supporting_skills.join(", ")} \n - Skill Gaps: ${ikigaiData.weakness_map?.skill_gaps.join(", ")} \n - Risks: ${ikigaiData.weakness_map?.risks.join(", ")} \n - Blocks: ${ikigaiData.weakness_map?.blocks.join(", ")}`;
   }
 
   const modulePrompt = `Module Context:\n  - Module Name: ${moduleContext.name}\n  - Description: ${moduleContext.description}\n  - Learning Outcomes: ${moduleContext.learningOutcomes.join(", ")}\n  - Topics Covered: ${moduleContext.topicsCovered.join(", ")}`;

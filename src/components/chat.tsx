@@ -461,6 +461,16 @@ const summaryStartIndicator = "IKIGAI_FINAL_SUMMARY:";
                 your_ikigai: '',
                 explanation: '',
                 next_steps: '',
+                strength_map: {
+                  core_strengths: [],
+                  supporting_skills: [],
+                  proof: ''
+                },
+                weakness_map: {
+                  skill_gaps: [],
+                  risks: [],
+                  blocks: []
+                }
               };
               
               if (saveIkigaiAnswers && userId) {

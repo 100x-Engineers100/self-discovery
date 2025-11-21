@@ -1,14 +1,6 @@
 import React from 'react';
 
-interface IkigaiData {
-  what_you_love: string;
-  what_you_are_good_at: string;
-  what_world_needs: string;
-  what_you_can_be_paid_for: string;
-  your_ikigai: string;
-  explanation: string;
-  next_steps: string;
-}
+import { IkigaiData } from "@/lib/types";
 
 interface IkigaiChartDisplayProps {
   ikigaiData: IkigaiData;
@@ -48,6 +40,22 @@ export const IkigaiChartDisplay: React.FC<IkigaiChartDisplayProps> = ({ ikigaiDa
         <h3 className="font-medium">Next Steps:</h3>
         <p>{ikigaiData.next_steps}</p>
       </div>
+      {ikigaiData.strength_map && (
+        <div className="mt-4">
+          <h3 className="font-medium">Strength Map:</h3>
+          <p><strong>Core Strengths:</strong> {ikigaiData.strength_map.core_strengths.join(", ")}</p>
+          <p><strong>Supporting Skills:</strong> {ikigaiData.strength_map.supporting_skills.join(", ")}</p>
+          <p><strong>Proof:</strong> {ikigaiData.strength_map.proof}</p>
+        </div>
+      )}
+      {ikigaiData.weakness_map && (
+        <div className="mt-4">
+          <h3 className="font-medium">Weakness Map:</h3>
+          <p><strong>Skill Gaps:</strong> {ikigaiData.weakness_map.skill_gaps.join(", ")}</p>
+          <p><strong>Risks:</strong> {ikigaiData.weakness_map.risks.join(", ")}</p>
+          <p><strong>Blocks:</strong> {ikigaiData.weakness_map.blocks.join(", ")}</p>
+        </div>
+      )}
     </div>
   );
 };

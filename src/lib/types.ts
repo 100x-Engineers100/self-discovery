@@ -10,6 +10,7 @@ import { AppUsageSchema } from "./usage";
 
 export interface IkigaiData {
   what_you_love: string;
+  status?: string;
   what_you_are_good_at: string;
   what_world_needs: string;
   what_you_can_be_paid_for: string;
@@ -18,6 +19,16 @@ export interface IkigaiData {
   next_steps: string;
   chat_history?: ChatMessage[];
   chat_number?: number;
+  strength_map?: {
+    core_strengths: string[];
+    supporting_skills: string[];
+    proof: string;
+  };
+  weakness_map?: {
+    skill_gaps: string[];
+    risks: string[];
+    blocks: string[];
+  };
 }
 
 export interface IkigaiApiResponse {

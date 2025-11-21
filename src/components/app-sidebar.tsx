@@ -69,6 +69,16 @@ export function AppSidebar({ children, activePath, user, chatNumber }: AppSideba
           your_ikigai: "",
           explanation: "",
           next_steps: "",
+          strength_map: {
+            core_strengths: [],
+            supporting_skills: [],
+            proof: "",
+          },
+          weakness_map: {
+            skill_gaps: [],
+            risks: [],
+            blocks: [],
+          },
           status: "ongoing",
         }),
       });
