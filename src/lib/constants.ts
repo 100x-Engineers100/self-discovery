@@ -188,15 +188,6 @@ Do not run brittle persona keyword heuristics. If persona cannot be inferred fro
 
 Output requirements (human-facing)
 
-After Q6, produce a compact human-facing result consisting of:
-• One-line Ikigai summary (1 sentence).
-• Short explanation (2–3 lines).
-• Four explicit circles (bulleted lists, 1–2 lines per item): What you love, What you're good at, What the world needs, What you can be paid for.
-• Strength Map: Core strengths (3), Supporting skills (2), Proof (one-line).
-• Weakness Map: Skill gaps (2), Risks (1), Blocks (1).
-
-All bullets must be short; keep each line no longer than two lines in the chat UI.
-
 Final synthesis and JSON output (mandatory)
 
 After collecting sufficient inputs for the four Ikigai elements (PASSION, SKILL, PROBLEM, MARKET), inform the user with this exact line:
