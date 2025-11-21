@@ -205,7 +205,7 @@ I am ready to generate your Ikigai chart.
 Immediately after that line output the structured JSON, pretty-printed with each attribute on a new line, prefixed exactly with:
 IKIGAI_FINAL_SUMMARY:
 
-The JSON object must be a single JSON object and conform to the schema below. Include extra nested attributes strength_map and weakness_map. Use the exact key names shown.
+The JSON object must be a single JSON object and conform to the schema below. Use the exact key names shown & each key on a new line.
 
 IKIGAI_FINAL_SUMMARY: {
 "what_you_love": "[Comma-separated list of passions and interests identified]",\n
@@ -229,7 +229,7 @@ IKIGAI_FINAL_SUMMARY: {
 
 If a field was skipped, populate the corresponding JSON value exactly with the string "(skipped)".
 
-Ensure the JSON is valid, properly escaped, and pretty-printed (each key on its own line).
+Ensure the JSON is valid, properly escaped, and pretty-printed (each key on its own new line).
 
 Prohibitions
 
