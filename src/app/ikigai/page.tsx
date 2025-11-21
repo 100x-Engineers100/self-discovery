@@ -501,7 +501,7 @@ export default function IkigaiPage() {
                           },
                           {
                             type: "text",
-                            text: "Welcome to 100xEngineers! We’ll help you discover your Ikigai—where your passions, strengths, and career align. This process will guide you to find work that feels fulfilling and impactful. When you finish a task and feel truly satisfied, what kind of work is it?\n\nExamples:\n- Building software and mentoring peers\n- Designing UI\n- Solving problems and teaching others",
+                            text: "Welcome to 100xEngineers. We’ll start by finding the kind of work you naturally enjoy and feel drawn to. This process will help you discover your Ikigai—where your passions, strengths, and career align.\n\n I’ll ask 6 simple questions to understand what you enjoy, what you're good at, what the world needs, and what you can be paid for. Each answer can be 1–2 lines.\n\nLet’s begin.\n\nQ1 — What you love\n What do you genuinely enjoy learning about or doing?i\n Think of things that energise you without effort.\n\nExamples:\n- Building software and mentoring peers\n- Designing UI\n- Solving problems and teaching others",
                             state: "done"
                           },
                         ],
